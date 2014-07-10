@@ -8,14 +8,14 @@
 """
 __all__ = ['ZFSTestCase']
 
-from tx.tests import TestCaseBase
-from butility import make_path
+from butility.tests import TestCase
+from butility import Path
 
 
-class ZFSTestCase(TestCaseBase):
+class ZFSTestCase(TestCase):
     """Base type for all ZFS related tests"""
     __slots__ = ()
 
-    fixture_root = make_path(__file__).dirname()
+    fixture_root = Path(__file__).dirname()
 
 # end class ZFSTestCase

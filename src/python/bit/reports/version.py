@@ -32,7 +32,7 @@ from bit.bundler import (Bundler,
                            VersionBundleList,
                            VersionBundle)
 
-from tx.cmd import InputError
+from bcmd import InputError
 
 from sqlalchemy import (create_engine,
                         MetaData,

@@ -8,9 +8,7 @@
 """
 __all__ = ['OverridableSubCommandMixin']
 
-import tx
-
-from tx.cmd import InputError
+from bcmd import InputError
 
 class OverridableSubCommandMixin(object):
     """A command which uses a KVStore to read its arguments from.
@@ -52,7 +50,7 @@ class OverridableSubCommandMixin(object):
             return
         # end early bailout
 
-        env = tx.environment.push('user overrides')
+        env = self.application().context().push('user overrides')
         kvstore = env._kvstore
         for kvstring in overrides:
             tokens = kvstring.split('=')

@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.tests.test_base
+@package fsmonitor.tests.test_base
 @brief tests for dropbox.base
 
 @author Sebastian Thiel
@@ -11,17 +11,13 @@ __all__ = []
 import os
 from time import time
 
-from dropbox.base import *
-from dropbox.tree import *
-from dropbox.finder import *
+from fsmonitor.base import *
+from fsmonitor.tree import *
+from fsmonitor.finder import *
 
 from . import DropboxTestCase
 
-from tx.core.kvstore import KeyValueStoreModifier
-from bit.utility import set_default_encoding
-
-# Assure we can handle filesystem objects somehow
-set_default_encoding('utf-8')
+from bkvstore import KeyValueStoreModifier
 
 
 class TestPackageDiffer(PackageDiffer):

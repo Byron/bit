@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.transaction.base
+@package fsmonitor.transaction.base
 @brief Base implementation for dropbox transactions
 
 @author Sebastian Thiel
@@ -12,12 +12,12 @@ from time import time
 from socket import gethostname
 from datetime import datetime
 
-from tx.core.kvstore import ChangeTrackingKeyValueStoreModifier
-from tx.processing.transaction import (Transaction,
-                                       StoringProgressIndicator)
+from bkvstore import ChangeTrackingKeyValueStoreModifier
+from btransaction import (Transaction,
+                          StoringProgressIndicator)
                                        
 
-from dropbox.sql import (with_threadlocal_session,
+from fsmonitor.sql import (with_threadlocal_session,
                          SQLPackageTransaction,
                          SQLTransactionFile)
 from sqlalchemy.orm import object_session

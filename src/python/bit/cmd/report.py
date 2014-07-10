@@ -10,8 +10,6 @@ __all__ = ['ReportCommandMixin']
 
 import sys
 
-import tx
-
 from .base import OverridableSubCommandMixin
 from bit.reports import Report
 
@@ -55,7 +53,7 @@ class ReportCommandMixin(OverridableSubCommandMixin, Plugin):
     def report_types(cls):
         """@return all report types currently registered"""
         assert cls.ReportBaseType is not None, "ReportBaseType must be set in subclass"
-        return tx.environment.classes(cls.ReportBaseType)
+        return self.application().context().types(cls.ReportBaseType)
 
     ## -- End Utilities -- @}
 

@@ -8,9 +8,8 @@
 """
 __all__ = ['ZSession']
 
-import tx
-from tx.core.component import EnvironmentStackContextClient
-from tx.core.kvstore import KeyValueStoreSchema
+from bapp import ApplicationSettingsMixin
+from bkvstore import KeyValueStoreSchema
 
 from sqlalchemy.orm import (Session,
                             sessionmaker)
@@ -20,10 +19,10 @@ from datetime import datetime
 from .orm import (ZPool,
                   ZDataset)
 
-log = service(tx.ILog).new('zfs.sql.session')
+log = logging.getLogger('zfs.sql.session')
 
 
-class ZSession(Session, EnvironmentStackContextClient):
+class ZSession(Session, ApplicationSettingsMixin):
     """A session for objects defined in our ORM. We integrate with the kvstore to obtain database information."""
     __slots__ = ()
 
@@ -46,7 +45,7 @@ class ZSession(Session, EnvironmentStackContextClient):
         @param engine the engine to use, or None
         """
         if engine is None:
-            data = cls.context_value()
+            data = cls.settings_value()
             engine = create_engine(data.hosturl)
         # end create engine
 

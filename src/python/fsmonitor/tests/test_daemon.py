@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.tests.test_daemon
+@package fsmonitor.tests.test_daemon
 @brief tests for dropbox.daemon
 
 @author Sebastian Thiel
@@ -11,7 +11,7 @@ __all__ = []
 from . import DropboxTestCase
 
 from nose import SkipTest
-from dropbox.daemon import *
+from fsmonitor.daemon import *
 
 
 class DropboxDaemonTestCase(DropboxTestCase):

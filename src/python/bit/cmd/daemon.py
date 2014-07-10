@@ -6,27 +6,26 @@
 @author Sebastian Thiel
 @copyright [GNU Lesser General Public License](https://www.gnu.org/licenses/lgpl.html)
 """
-__all__ = ['DaemonCommandBase']
+__all__ = ['DaemonCommand']
 
 import sys
 import os
 import signal
 from time import sleep
 
-import tx
-from tx.cmd import CommandBase
+from bcmd import Command
 from butility import Path
 from .base import OverridableSubCommandMixin
                     
 
-class DaemonCommandBase(OverridableSubCommandMixin, CommandBase):
-    """Main Daemon command without subcommands. Just starts a thread which can be an EnvironmentStackContextClient
+class DaemonCommand(OverridableSubCommandMixin, Command):
+    """Main Daemon command without subcommands. Just starts a thread which can be an ApplicationSettingsMixin
     """
     __slots__ = ()
 
     # -------------------------
     ## @name Configuration
-    # @note all CommandBase configuration must be provided too
+    # @note all Command configuration must be provided too
     # @{
 
     ## The kind of TerminatableThread, which must be a context client, to daemonize
@@ -144,7 +143,7 @@ class DaemonCommandBase(OverridableSubCommandMixin, CommandBase):
     ## -- End Utilities -- @}
 
     def setup_argparser(self, parser):
-        super(DaemonCommandBase, self).setup_argparser(parser)
+        super(DaemonCommand, self).setup_argparser(parser)
 
         assert self.ThreadType is not None, "ThreadType must be set in subclass"
 
@@ -163,7 +162,7 @@ class DaemonCommandBase(OverridableSubCommandMixin, CommandBase):
 
         if args.show_config:
             print "%s.*" % self.ThreadType.schema().key()
-            print self.ThreadType.context_value()
+            print self.ThreadType.settings_value()
             return self.SUCCESS
         # end handle config printing
 
@@ -210,5 +209,5 @@ class DaemonCommandBase(OverridableSubCommandMixin, CommandBase):
         #end handle pid file
 
 
-# end class DaemonCommandBase
+# end class DaemonCommand
 

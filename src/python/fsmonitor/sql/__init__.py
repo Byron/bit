@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.sql
+@package fsmonitor.sql
 @brief Package with SQL related types and sql object model
 
 @author Sebastian Thiel

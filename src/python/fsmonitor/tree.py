@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.tree
+@package fsmonitor.tree
 @brief a simple utility type representing the state of a tree
 
 @author Sebastian Thiel
@@ -55,7 +55,7 @@ class TreeRoot(dict):
         
     def __init__(self, root_path, one_package_per_file=False):
         """Initialize this instance from the given root path and parse all information contained in the directory
-        @param root_path tx.Path instance, pointing to an existing directory
+        @param root_path butility.Path instance, pointing to an existing directory
         @param one_package_per_file if True, every file will be a package."""
         self._root_path = Path(root_path)
         self._packages = None

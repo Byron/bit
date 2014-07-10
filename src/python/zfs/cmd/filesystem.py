@@ -16,7 +16,7 @@ from zfs.snapshot import SnapshotSender
 from zfs.sql import ZSession
 from zfs.url import ZFSURL
 
-from tx.cmd.argparse import ParserError
+from bcmd.argparse import ParserError
 from bit.utility import DistinctStringReducer
 
 
@@ -94,7 +94,7 @@ class FilesystemSubCommand(ZFSSubCommand, Plugin):
             # end handle invalid source
 
             if not senders:
-                self.log().info('no filesystem configured a destination url using the tx:receive-url property')
+                self.log().info('no filesystem configured a destination url using the zfs:receive-url property')
                 return self.SUCCESS
             # end handle no result
 

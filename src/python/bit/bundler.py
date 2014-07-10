@@ -13,11 +13,11 @@ import os
 import re
 from itertools import chain
 
-import tx
-from butility import LazyMixin
+from butility import (LazyMixin,
+                      Meta)
 
 
-class ListAggregatorMeta(tx.MetaBase):
+class ListAggregatorMeta(Meta):
     """A metaclass to automatically generate methods which aggregate information on a list of items.
     The algorithm does so lazily and all at once upon first request. That way, the list is iterated only once"""
     __slots__ = ()

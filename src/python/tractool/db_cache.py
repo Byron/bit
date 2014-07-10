@@ -14,10 +14,8 @@ import sys
 from butility import LazyMixin
 
 from . import base
-from .utility import (
-                        CacheParser,
-                        CSVJob
-                    )
+from .utility import (CacheParser,
+                      CSVJob )
 
 
 class InMemoryCache(CacheParser, LazyMixin):
@@ -75,7 +73,7 @@ class InMemoryCache(CacheParser, LazyMixin):
 # end class CacheStorage
 
 
-class DBCacheSubCommand(base.TractorDBCommandBase, Plugin):
+class DBCacheSubCommand(base.TractorDBCommand, Plugin):
     """Implemnts listing the raw database in various ways"""
     __slots__ = ()
     

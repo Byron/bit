@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.tests.test_transaction
+@package fsmonitor.tests.test_transaction
 @brief tests for dropbox.transaction
 
 @author Sebastian Thiel
@@ -9,23 +9,23 @@
 __all__ = ['DropboxTransactionBase']
 
 from time import time
+import logging
 from datetime import datetime
 
-import tx
-from tx.core.kvstore import (KeyValueStoreModifier,
-                             RootKey)
+from bkvstore import (KeyValueStoreModifier,
+                      RootKey)
 
 from . import DropboxTestCase
 from .test_sql import DummyPackage
 
-from tx.tests import with_rw_directory
-from dropbox.sql import (PackageSession,
+from butility.tests import with_rw_directory
+from fsmonitor.sql import (PackageSession,
                          SQLPackageTransaction)
-from dropbox.tree import TreeRoot
-from dropbox.finder import DropboxFinder
-from dropbox.transaction import *
+from fsmonitor.tree import TreeRoot
+from fsmonitor.finder import DropboxFinder
+from fsmonitor.transaction import *
 
-log = service(tx.ILog).new('dropbox.tests.test_transaction')
+log = logging.getLogger('dropbox.tests.test_transaction')
 
 
 class DropboxDaemonTestCase(DropboxTestCase):

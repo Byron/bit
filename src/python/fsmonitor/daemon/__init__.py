@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.daemon
+@package fsmonitor.daemon
 @brief package for all daemon related code
 
 @author Sebastian Thiel

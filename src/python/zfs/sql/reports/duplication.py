@@ -13,23 +13,19 @@ from datetime import (datetime,
 from time import time
 import os
 
-from tx.core.kvstore import StringList
+from bkvstore import StringList
 
 
-from bit.utility import (
-                                size_to_int,
-                                delta_to_tty_string,
-                                int_to_size_string,
-                                datetime_days_ago,
-                                delta_to_seconds,
-                                size_to_int,
-                                float_to_tty_string
-                            )
+from bit.utility import (size_to_int,
+                         delta_to_tty_string,
+                         int_to_size_string,
+                         datetime_days_ago,
+                         delta_to_seconds,
+                         size_to_int,
+                         float_to_tty_string)
 from .base import ZReportGenerator
-from .. import (
-                    ZPool,
-                    ZDataset,
-                )
+from .. import (ZPool,
+                ZDataset,)
 from zfs.snapshot import SnapshotSender
 
 
@@ -101,7 +97,7 @@ class ZDuplicationReportGenerator(ZReportGenerator, Plugin):
         # Create an initial query and map filesystems by basename
         rep = self.ReportType(self.report_schema)
         now = datetime.now()
-        config = self.context_value()
+        config = self.settings_value()
         query = self._session.query(ZDataset).filter(ZDataset.type == self.TYPE_FILESYSTEM).\
                                               filter(ZDataset.name.like(config.name_like)).\
                                               order_by(ZDataset.name, ZDataset.creation)

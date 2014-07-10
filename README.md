@@ -8,6 +8,8 @@ The bit project is a collection of libraries and tools to aid maintaining a comp
 
 ## Requirements
 
+All code is only verified to be working on python 2.7 at the current time.
+
 * [bcore](https://github.com/Byron/bcore)
 * [sqlalchemy](https://github.com/zzzeek/sqlalchemy)
     - For some tools to be useful in production, an sql database server is required.

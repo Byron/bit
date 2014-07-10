@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.sql.orm
+@package fsmonitor.sql.orm
 @brief The SQL schema used for the dropbox package database
 
 @author Sebastian Thiel
@@ -8,17 +8,17 @@
 """
 __all__ = ['SQLPackage', 'SQLPackageTransaction', 'SQLTransactionFile']
 
-from sqlalchemy import (
-                            Column,
-                            BigInteger,
-                            String,
-                            Integer,
-                            DateTime,
-                            ForeignKey,
-                            Float,
-                            Boolean,
-                            Table
-                        )
+import logging
+
+from sqlalchemy import (Column,
+                        BigInteger,
+                        String,
+                        Integer,
+                        DateTime,
+                        ForeignKey,
+                        Float,
+                        Boolean,
+                        Table )
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import (object_session,
@@ -28,9 +28,8 @@ from datetime import datetime
 
 from butility import Path
 from bit.utility import ThreadsafeCachingIDParser
-import tx
 
-log = service(tx.ILog).new('dropbox.sql.orm')
+log = logging.getLogger('dropbox.sql.orm')
 
 # We use MyISAM for the files table, which will grow large
 # InnoDB is used to keep track of relations between packages and operations

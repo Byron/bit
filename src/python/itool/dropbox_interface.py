@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package itool.dropbox
+@package itool.dropbox_interface
 @brief A commandline interface for handling the dropobx
 
 @author Sebastian Thiel
@@ -17,7 +17,7 @@ from .base import IToolSubCommand
 
 from bit.cmd import OverridableSubCommandMixin
 from bit.reports import Report
-from bit.utility import (utc_datetime_to_date_time_string,
+from bit.utility import (  utc_datetime_to_date_time_string,
                            float_percent_to_tty_string,
                            int_to_size_string,
                            IDParser,
@@ -25,10 +25,10 @@ from bit.utility import (utc_datetime_to_date_time_string,
 
 from butility import login_name
 
-from dropbox.daemon import DaemonThread
-from dropbox.sql import (PackageSession,
-                         SQLPackageTransaction,
-                         SQLPackage)
+from fsmonitor.daemon import DaemonThread
+from fsmonitor.sql import (PackageSession,
+                           SQLPackageTransaction,
+                           SQLPackage)
 
 
 
@@ -332,7 +332,7 @@ class DropboxInterfaceSubCommand(IToolSubCommand, OverridableSubCommandMixin, Pl
     def execute(self, args, remaining_args):
         self.apply_overrides(DaemonThread.schema(), args.overrides)
         subcmd = getattr(args, self.ARG_SUBCOMMAND)
-        config = DaemonThread.context_value()
+        config = DaemonThread.settings_value()
 
         # Assure the caller may actually call us
         res = IDParser().parse(login_name())

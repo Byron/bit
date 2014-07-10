@@ -9,16 +9,14 @@ We use an ORM from which the schema is extracted. It can be used to initialize d
 """
 __all__ = ['ZDataset', 'ZPool', 'ZSQLBase']
 
-from sqlalchemy import (
-                            Column,
-                            BigInteger,
-                            String,
-                            Integer,
-                            DateTime,
-                            ForeignKey,
-                            Float,
-                            Boolean
-                        )
+from sqlalchemy import (Column,
+                        BigInteger,
+                        String,
+                        Integer,
+                        DateTime,
+                        ForeignKey,
+                        Float,
+                        Boolean)
 
 from sqlalchemy.ext.declarative import declarative_base
 from zfs.url import ZFSURL
@@ -144,8 +142,8 @@ class ZDataset(ZSQLBase):
     # Our own attribute keep track of when the value was generated
     updated_at     = Column(DateTime)
 
-    tx_priority    = Column('tx:priority', Integer)
-    tx_receive_url = Column('tx:receive-url', String(256))
+    zfs_priority    = Column('zfs:priority', Integer)
+    zfs_receive_url = Column('zfs:receive-url', String(256))
 
     # -------------------------
     ## @name Interface

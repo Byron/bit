@@ -11,19 +11,13 @@ __all__ = ['ZLimitsReportGenerator']
 from datetime import datetime
 from time import time
 
-from tx.core.kvstore import StringList
-from bit.utility import (
-                                size_to_int,
-                                datetime_days_ago,
-                            )
-from .base import (
-                    ZReportGenerator,
-                    host_filter
-                 )
-from .. import (
-                    ZPool,
-                    ZDataset,
-                )
+from bkvstore import StringList
+from bit.utility import (size_to_int,
+                         datetime_days_ago)
+from .base import (ZReportGenerator,
+                   host_filter)
+from .. import (ZPool,
+                ZDataset)
 
 
 class ZLimitsReportGenerator(ZReportGenerator, Plugin):

@@ -14,20 +14,16 @@ import hashlib
 import socket
 from itertools import chain
 
-from os import (
-                    readlink,
-                    lstat
-                )
+from os import (readlink,
+                lstat )
 from stat import S_ISLNK as islink
 from stat import S_ISDIR as isdir
 from stat import S_ISREG as isreg
 from datetime import datetime
 from binascii import a2b_hex
 
-from time import (
-                    time,
-                    gmtime
-                 )
+from time import (time,
+                  gmtime )
 
 try:
     # see 
@@ -39,23 +35,21 @@ except ImportError:
 # end ignore missing lz4 compressor
 
 from bit.utility import (int_to_size_string,
-                           seconds_to_datetime)
-from tx.core.component import EnvironmentStackContextClient
-from tx.core.kvstore import KeyValueStoreSchema
+                         seconds_to_datetime)
+from bapp import ApplicationSettingsMixin
+from bkvstore import KeyValueStoreSchema
 from .base import IToolSubCommand
 from . import fsstat_schema
 
 from butility import Path
-import tx.cmd.argparse as argparse
+import bcmd.argparse as argparse
 
-from sqlalchemy import (
-                            create_engine,
-                            MetaData,
-                            Index,
-                            select,
-                            bindparam,
-                            Binary
-                       )
+from sqlalchemy import (create_engine,
+                        MetaData,
+                        Index,
+                        select,
+                        bindparam,
+                        Binary)
 
 
 # ==============================================================================
@@ -241,7 +235,7 @@ class HashStreamer(Streamer):
 # end class Sha1Streamer
 
 
-class FSStatSubCommand(IToolSubCommand, Plugin, EnvironmentStackContextClient):
+class FSStatSubCommand(IToolSubCommand, Plugin, ApplicationSettingsMixin):
     """Implements interaction with filesystem info caches"""
     __slots__ = ()
 
@@ -265,7 +259,7 @@ class FSStatSubCommand(IToolSubCommand, Plugin, EnvironmentStackContextClient):
     def setup_argparser(self, parser):
         super(FSStatSubCommand, self).setup_argparser(parser)
         
-        config = self.context_value()
+        config = self.settings_value()
         help = "create or update the given database with path information. It must exist already, even though a table can be specified with -t."
         help += "If this flag is not set either on the commandline or through the configuration, nothing will be done."
         parser.add_argument('-ud', '--update-database', dest='update_db', metavar='SQLALCHEMY_URL', 

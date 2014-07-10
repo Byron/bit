@@ -9,36 +9,29 @@
 __all__ = ['ListSubCommand']
 
 import sys
-from datetime import (
-                        datetime,
-                        timedelta
-                      )
+from datetime import (datetime,
+                      timedelta)
 
 from .base import ZFSSubCommand
-from zfs.sql import (
-
-                        ZSession,
-                        ZPool,
-                        ZDataset
-                    )
+from zfs.sql import (ZSession,
+                     ZPool,
+                     ZDataset)
 from zfs.url import ZFSURL
 from zfs.sql.reports import ZReportGenerator
 from bit.reports import Report
-from tx.core.component import EnvironmentStackContextClient
-from tx.core.kvstore import KeyValueStoreSchema
-from bit.utility import (
-                            delta_to_tty_string,
-                            datetime_to_date_string,
-                            int_to_size_string,
-                            float_percent_to_tty_string,
-                            float_to_tty_string,
-                            rsum,
-                            ravg,
-                            DistinctStringReducer
-                          )
+from bapp import ApplicationSettingsMixin
+from bkvstore import KeyValueStoreSchema
+from bit.utility import (delta_to_tty_string,
+                         datetime_to_date_string,
+                         int_to_size_string,
+                         float_percent_to_tty_string,
+                         float_to_tty_string,
+                         rsum,
+                         ravg,
+                         DistinctStringReducer)
 
 
-class ListSubCommand(ZFSSubCommand, EnvironmentStackContextClient, Plugin):
+class ListSubCommand(ZFSSubCommand, ApplicationSettingsMixin, Plugin):
     """Use reports (as plugins) whose interface is made available through the commandline"""
     __slots__ = ()
 
@@ -185,7 +178,7 @@ class ListSubCommand(ZFSSubCommand, EnvironmentStackContextClient, Plugin):
         return self
 
     def execute(self, args, remaining_args):
-        config = self.context_value()
+        config = self.settings_value()
         session = ZSession.new()
         zcls = args.type == ZReportGenerator.TYPE_POOL and ZPool or ZDataset
         query = session.query(zcls)

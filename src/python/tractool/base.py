@@ -6,22 +6,19 @@
 @author Sebastian Thiel
 @copyright [GNU Lesser General Public License](https://www.gnu.org/licenses/lgpl.html)
 """
-__all__ = ['TractoolCommand', 'TractoolSubCommand', 'TractorDBCommandBase']
+__all__ = ['TractoolCommand', 'TractoolSubCommand', 'TractorDBCommand']
 
 import sys
 
 import TrContext
-import tx
 
-from tx.cmd import (
-                        CommandBase,
-                        SubCommandBase
-                   )
+from bcmd import (Command,
+                  SubCommand)
 
 from butility import Path
 
 
-class TractoolCommand(CommandBase):
+class TractoolCommand(Command):
     """Main command to pick up some subcommands and possibly provide some shared arguments"""
     __slots__ = ()
 
@@ -35,7 +32,7 @@ class TractoolCommand(CommandBase):
 # end class Name
 
 
-class TractoolSubCommand(SubCommandBase):
+class TractoolSubCommand(SubCommand):
     """A basic subcommand for the tractool"""
     __slots__ = ()
     
@@ -45,7 +42,7 @@ class TractoolSubCommand(SubCommandBase):
 
 
 
-class TractorDBCommandBase(TractoolSubCommand):
+class TractorDBCommand(TractoolSubCommand):
     """A base class for sub commands that interact with the tractor db directly. 
     
     It provides common arguments""" 
@@ -64,4 +61,4 @@ class TractorDBCommandBase(TractoolSubCommand):
     
 
 
-# end class TractorDBCommandBase
+# end class TractorDBCommand

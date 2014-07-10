@@ -16,7 +16,7 @@ from fnmatch import fnmatch
 from .base import ReportGeneratorBase
 from .version import VersionReportGenerator
 
-from tx.cmd import InputError
+from bcmd import InputError
 from butility import Path
 
 from bit.utility import (int_to_size_string,

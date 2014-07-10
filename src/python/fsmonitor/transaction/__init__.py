@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.transaction
+@package fsmonitor.transaction
 @brief A package for dropbox transactions
 
 @author Sebastian Thiel

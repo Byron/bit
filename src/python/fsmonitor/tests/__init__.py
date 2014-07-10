@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.tests
+@package fsmonitor.tests
 @brief Top-level package for dropbox tests
 
 @author Sebastian Thiel

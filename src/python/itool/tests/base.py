@@ -8,10 +8,10 @@
 """
 __all__ = ['ItoolTestCase']
 
-from tx.tests import TestCaseBase
+from butility.tests import TestCase
 
 
-class ItoolTestCase(TestCaseBase):
+class ItoolTestCase(TestCase):
     """Base type for all Itool related tests"""
     __slots__ = ()
 

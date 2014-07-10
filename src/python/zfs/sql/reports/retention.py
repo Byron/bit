@@ -10,24 +10,19 @@ __all__ = ['ZRetentionReportGenerator', 'RetentionPolicy']
 
 from datetime import datetime
 from time import time
+import logging
 
-import tx
-from tx.core.kvstore import StringList
+from bkvstore import StringList
 
 from bit.retention import RetentionPolicy
-from bit.utility import   (
-                                seconds_to_datetime,
-                                delta_to_tty_string
-                            )
-from .base import (
-                        ZReportGenerator,
-                        host_filter
-                  )
+from bit.utility import   (seconds_to_datetime,
+                           delta_to_tty_string)
+from .base import (ZReportGenerator,
+                   host_filter)
 from .. import ZDataset
 
 
-
-log = service(tx.ILog).new('zfs.sql.reports.retention')
+log = logging.getLogger('zfs.sql.reports.retention')
 
 
 
@@ -42,8 +37,7 @@ class ZRetentionReportGenerator(ZReportGenerator, Plugin):
                                                             applied_every = str,
                                                             hosts = StringList,
                                                             debug = int,
-                                                            name_like = str
-                                                            ))
+                                                            name_like = str))
 
     PolicyType = RetentionPolicy
 

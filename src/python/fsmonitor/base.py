@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.base
+@package fsmonitor.base
 @brief Basic dropbox types
 
 @author Sebastian Thiel
@@ -9,23 +9,23 @@
 __all__ = ['Dropbox']
 
 import time
+import logging
 from itertools import chain
 
-import tx
-from bit.utility import KVFrequencyStringAsSeconds
-from tx.core.kvstore import (KeyValueStoreProvider,
-                             KeyValueStoreSchema,
-                             StringList,
-                             AnyKey,
-                             RootKey,
-                             YAMLStreamSerializer)
-from tx.core.environ.settings import (PersistentSettingsEnvironmentStackContextClient,
-                                      PersistentSettings)
+from bkvstore import (KeyValueStoreProvider,
+                      KeyValueStoreSchema,
+                      FrequencyStringAsSeconds,
+                      StringList,
+                      AnyKey,
+                      RootKey,
+                      YAMLStreamSerializer)
+from bapp import (PersistentApplicationSettingsMixin,
+                 PersistentSettings)
 from butility import Path
 
 from .tree import TreeRoot
 
-log = service(tx.ILog).new('dropbox')
+log = logging.getLogger('dropbox')
 
 
 class _PersistentYAMLSettings(PersistentSettings):
@@ -35,7 +35,7 @@ class _PersistentYAMLSettings(PersistentSettings):
 #end class _PersistentYAMLSettings
 
 
-class Dropbox(PersistentSettingsEnvironmentStackContextClient):
+class Dropbox(PersistentApplicationSettingsMixin):
     """A type representing a dropbox.
 
     Each dropbox has configuration, which is used to determine the expected kind of behaviour.
@@ -55,11 +55,11 @@ class Dropbox(PersistentSettingsEnvironmentStackContextClient):
     TRANSACTIONS_KEY = 'transactions'
 
     # Our basic configuration - it's not based on the global kvstore
-    _schema = KeyValueStoreSchema(RootKey, {    'package' : dict(stable_after=KVFrequencyStringAsSeconds('60s'),   # amount of time after which a package is stable, and allow operations to run on them.
+    _schema = KeyValueStoreSchema(RootKey, {    'package' : dict(stable_after=FrequencyStringAsSeconds('60s'),   # amount of time after which a package is stable, and allow operations to run on them.
                                                              search_paths=StringList),     # a list of relative or absolute paths to directories to inventory
                                                 'auto_approve' : StringList,               # Names of transactions which are automatically approved to be queued
                                                 'one_package_per_file' : False,            # If True, there will be one package per file, otherwise packages usually are directories
-                                                'update_packages_every' : KVFrequencyStringAsSeconds(), # An optional override for how often our packages should be updated
+                                                'update_packages_every' : FrequencyStringAsSeconds(), # An optional override for how often our packages should be updated
                                                 })
 
 

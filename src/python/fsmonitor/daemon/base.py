@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.daemon.base
+@package fsmonitor.daemon.base
 @brief Basic daemon and scheduler implementation
 
 @author Sebastian Thiel
@@ -9,13 +9,15 @@
 __all__ = ['DaemonThread']
 
 import threading
+import logging
 import sys
+
 from Queue import (Queue,
                    Empty)
 from time import (time, 
                   sleep)
 
-import tx
+import bapp
 from ..base import Dropbox
 from .utility import (SQLPackageDifferMixin,
                       SessionWorkerThread,
@@ -23,22 +25,21 @@ from .utility import (SQLPackageDifferMixin,
                       DaemonDropboxFinderMixin)
 
 from bit.utility import ( TerminatableThread,
-                            KVFrequencyStringAsSeconds,
-                            set_default_encoding)
-from tx.core.kvstore import (KeyValueStoreSchema,
+                            FrequencyStringAsSeconds )
+from bkvstore import (KeyValueStoreSchema,
                              PathList,
                              AnyKey)
-from tx.core.component import EnvironmentStackContextClient
-from dropbox.sql import (PackageSession,
+from bapp import ApplicationSettingsMixin
+from fsmonitor.sql import (PackageSession,
                          SQLPackageTransaction,
                          with_threadlocal_session)
 
-from dropbox.transaction import DropboxTransactionBase
+from fsmonitor.transaction import DropboxTransactionBase
 
-log = service(tx.ILog).new('dropbox.daemon')
+log = logging.getLogger('dropbox.daemon')
 
 
-class DaemonThread(TerminatableThread, EnvironmentStackContextClient, DaemonDropboxFinderMixin, SQLPackageDifferMixin):
+class DaemonThread(TerminatableThread, ApplicationSettingsMixin, DaemonDropboxFinderMixin, SQLPackageDifferMixin):
     """A never-ending, auto-updating process which supervises dropboxes and tasks related to it.
 
     It is meant to run as thread, and uses the KV store for configuration.
@@ -84,9 +85,9 @@ class DaemonThread(TerminatableThread, EnvironmentStackContextClient, DaemonDrop
     _schema = KeyValueStoreSchema('dropbox.daemon', {'search' : {'paths' : PathList,                # paths at which to search dropboxes
                                                                  'max_directory_depth' : 1,         # recursive depth for config file search
                                                                  'config_file_glob' : '.dropbox.yaml'},    # glob to use to find a dropbox configuration
-                                                         'check' : { 'dropboxes_every' : KVFrequencyStringAsSeconds('60s'),          # how often to check for new dropboxes
-                                                                     'packages_every' : KVFrequencyStringAsSeconds('15s'),           # how often to check for packages in each dropbox
-                                                                     'transactions_every' : KVFrequencyStringAsSeconds('15s')        # how often to check for finished transactions that need handling
+                                                         'check' : { 'dropboxes_every' : FrequencyStringAsSeconds('60s'),          # how often to check for new dropboxes
+                                                                     'packages_every' : FrequencyStringAsSeconds('15s'),           # how often to check for packages in each dropbox
+                                                                     'transactions_every' : FrequencyStringAsSeconds('15s')        # how often to check for finished transactions that need handling
                                                                  },
                                                          'default_encoding' : 'utf-8',  # Encoding to use within python
                                                          'threads' : {'num_update_threads' : 1,         # how many parallel updates (dropboxes, packages)
@@ -105,13 +106,10 @@ class DaemonThread(TerminatableThread, EnvironmentStackContextClient, DaemonDrop
         self.daemon = True
         self._update_dropboxes_scheduled = False
         
-        self._config = config = self.context_value()
+        self._config = config = self.settings_value()
         assert config.search.paths, "Need to specify at least one dropbox search path"
         self._ops_queue    = Queue()
         self._update_queue = Queue()
-
-        # Setup new default encoding ... don't know why python is so shitty about changing it ...
-        set_default_encoding(config.default_encoding)
 
         # init mixins
         SQLPackageDifferMixin.__init__(self)
@@ -224,7 +222,7 @@ class DaemonThread(TerminatableThread, EnvironmentStackContextClient, DaemonDrop
                 # NOTE: if it wouldn't need approval, we wouldn't even be here as it would be running or 
                 # finished
                 # ... and queue the transaction
-                trans_cls = self._transaction_cls_by_name(tx.environment.classes(DropboxTransactionBase), sql_trans.type_name)
+                trans_cls = self._transaction_cls_by_name(bapp.main().context().types(DropboxTransactionBase), sql_trans.type_name)
                 assert trans_cls is not None, "Couldn't find transaction's implementation even though it was previously created by us"
                 trans = trans_cls(log, sql_instance=sql_trans,
                                        dropbox_finder=self,

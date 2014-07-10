@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.transaction.transfer
+@package fsmonitor.transaction.transfer
 @brief A simple transaction to transfer packages from a to b
 
 @author Sebastian Thiel
@@ -12,21 +12,21 @@ from time import (time,
                   gmtime,
                   strftime,
                   timezone)
+import logging
 
-import tx
-from bit.utility import KVFrequencyStringAsSeconds
 from .base import DropboxTransactionBase
 
-from tx.core.kvstore import (KeyValueStoreSchema,
-                             RootKey)
+from bkvstore import (KeyValueStoreSchema,
+                      FrequencyStringAsSeconds
+                      RootKey)
 
 from butility import Path
 
-from tx.processing.transaction.operations.fsops import (DeleteOperation,
-                                                        MoveFSItemOperation,
-                                                        CreateFSItemOperation)
+from btransactions import (DeleteOperation,
+                           MoveFSItemOperation,
+                           CreateFSItemOperation)
 
-log = service(tx.ILog).new('dropbox.transaction.transfer')
+log = logging.getLogger('dropbox.transaction.transfer')
 
 
 
@@ -42,7 +42,7 @@ class DeleteDropboxTransaction(DropboxTransactionBase):
 
     ## -- End Constants -- @}
 
-    schema = KeyValueStoreSchema(RootKey, dict(after_being_stable_for=KVFrequencyStringAsSeconds('1d')))                  # mode of operation
+    schema = KeyValueStoreSchema(RootKey, dict(after_being_stable_for=FrequencyStringAsSeconds('1d')))                  # mode of operation
 
 
     def __init__(self, *args, **kwargs):

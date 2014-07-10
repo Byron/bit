@@ -8,15 +8,15 @@
 """
 __all__ = ['ITTestCaseBase']
 
-from tx.tests import TestCaseBase
-from butility import make_path
+from butility.tests import TestCase
+from butility import Path
 
 
-class ITTestCaseBase(TestCaseBase):
+class ITTestCaseBase(TestCase):
     """Base type for all IT related test"""
     __slots__ = ()
 
-    fixture_root = make_path(__file__).dirname()
+    fixture_root = Path(__file__).dirname()
 
 # end class ITTestCaseBase
 

@@ -10,20 +10,11 @@ __all__ = ['IToolCommand', 'IToolSubCommand']
 
 import sys
 
-# Force encoding to something common
-reload(sys)
-sys.setdefaultencoding('utf-8')
-
-import tx
-
-from tx.cmd import (
-                        CommandBase,
-                        SubCommandBase
-                   )
+from bcmd import (Command,
+                  SubCommand )
 
 
-
-class IToolCommand(CommandBase):
+class IToolCommand(Command):
     """Main command to pick up some subcommands and possibly provide some shared arguments"""
     __slots__ = ()
 
@@ -37,7 +28,7 @@ class IToolCommand(CommandBase):
 # end class Name
 
 
-class IToolSubCommand(SubCommandBase):
+class IToolSubCommand(SubCommand):
     """A basic subcommand for the itool"""
     __slots__ = ()
     

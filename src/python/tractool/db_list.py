@@ -10,19 +10,17 @@ __all__ = []
 
 import os
 import sys
-import logging
+
 from fnmatch import fnmatch
 
 from . import base
-from .utility import (
-                        CacheParser,
-                        CSVJob
-                      )
+from .utility import (CacheParser,
+                      CSVJob)
 
 import TrContext
 
 
-class DBListSubCommand(base.TractorDBCommandBase, Plugin):
+class DBListSubCommand(base.TractorDBCommand, Plugin):
     """Implemnts listing the raw database in various ways"""
     __slots__ = (
                     'args',     # Our input argument namespace

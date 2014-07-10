@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.cmd
+@package fsmonitor.cmd
 @brief top level package for all command related implementation.
 
 @author Sebastian Thiel

@@ -8,15 +8,12 @@
 """
 __all__ = ['ZFSCommand', 'ZFSSubCommand', 'OverridableZFSSubCommand']
 
-import tx
-from tx.cmd import (
-                        CommandBase,
-                        SubCommandBase
-                    )
+from bcmd import (Command,
+                  SubCommand)
 
 from bit.cmd import OverridableSubCommandMixin
 
-class ZFSCommand(CommandBase):
+class ZFSCommand(Command):
     """Main ZFS command, does nothing as it has sub-commands"""
     __slots__ = ()
 
@@ -30,7 +27,7 @@ class ZFSCommand(CommandBase):
 # end class ZFSCommand
 
 
-class ZFSSubCommand(SubCommandBase):
+class ZFSSubCommand(SubCommand):
     """A subcommand to the ZFS Main command"""
     __slots__ = ()
 

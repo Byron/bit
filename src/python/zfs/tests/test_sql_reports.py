@@ -10,17 +10,15 @@ __all__ = []
 
 from zfs.tests import ZFSTestCase
 from zfs.sql.session import ZSession
-from zfs.sql.orm import (
-                            ZPool,
-                            ZDataset
-                        )
+from zfs.sql.orm import (ZPool,
+                         ZDataset)
 from zfs.sql.reports import *
 from zfs.url import ZFSURL
 from sqlalchemy import create_engine
 from bit.utility import seconds_to_datetime
 from time import time
 
-from cStringIO import StringIO
+from butility.compat import StringIO
 
 
 class ReportsTestCase(ZFSTestCase):
@@ -42,7 +40,7 @@ class ReportsTestCase(ZFSTestCase):
 
     def test_limits(self):
         """Verify the limit check works as expected"""
-        config = ZLimitsReportGenerator.context_value()
+        config = ZLimitsReportGenerator.settings_value()
         config.max_pool_percent = config.max_filesystem_percent = 80.0
         config.min_filesystem_avail_size = '5G'
         config.min_snapshot_size = config.min_filesystem_size = '100k'
@@ -143,7 +141,7 @@ class ReportsTestCase(ZFSTestCase):
 
     def test_retention(self):
         """Verify retention policy report"""
-        config = ZRetentionReportGenerator.context_value()
+        config = ZRetentionReportGenerator.settings_value()
         config.policy = '1h:1d,1d:14d,14d:28d,30d:1y'
         config.name_like = '%GlobalScripts%'
         self._assert_rep_not_empty(ZRetentionReportGenerator, config)
@@ -245,11 +243,11 @@ class ReportsTestCase(ZFSTestCase):
 
     def test_duplication(self):
         """check the duplication report"""
-        config = ZDuplicationReportGenerator.context_value()
+        config = ZDuplicationReportGenerator.settings_value()
         self._assert_rep_not_empty(ZDuplicationReportGenerator, config)
 
     def test_reserve(self):
         """check the reserve report"""
-        config = ZReserveReportGenerator.context_value()
+        config = ZReserveReportGenerator.settings_value()
         self._assert_rep_not_empty(ZReserveReportGenerator, config)
         

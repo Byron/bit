@@ -14,21 +14,16 @@ from time import time
 from urlparse import urlsplit
 
 from .base import ZFSSubCommand
-from zfs.parse import   (
-                            ZPoolOmniOSParser,
-                            ZPoolSolarisParser,
-                            ZPoolOmniOSLatestVersionParser,
-                            AdaptiveColumnParser
-                        )
-from tx.core.kvstore import KeyValueStoreSchema
-from zfs.sql import (
-
-                        ZSession,
-                        ZPool,
-                        ZDataset
-                    )
+from zfs.parse import   (ZPoolOmniOSParser,
+                         ZPoolSolarisParser,
+                         ZPoolOmniOSLatestVersionParser,
+                         AdaptiveColumnParser)
+from bkvstore import KeyValueStoreSchema
+from zfs.sql import (ZSession,
+                     ZPool,
+                     ZDataset)
 from bit.utility import (graphite_submit,
-                           CARBON_PORT)
+                         CARBON_PORT)
 
 
 # -------------------------
@@ -45,7 +40,7 @@ def csv_convert(host, sample):
 ## -- End Utilities -- @}
 
 
-class GraphiteConverter(EnvironmentStackContextClient):
+class GraphiteConverter(ApplicationSettingsMixin):
     """A converter taking samples and converting them into a structure suitable for consumption by graphite.
 
     The information provided by the parser should just contain volatile information associated with filesystems
@@ -73,7 +68,7 @@ class GraphiteConverter(EnvironmentStackContextClient):
         @return this instances
         """
         gsamples = list()
-        graphite = self.context_value()
+        graphite = self.settings_value()
 
         metrics, subdir = ztype is ZPool and (self.zpool_metrics, 'pools') or (self.zfilesystem_metrics, 'filesystems')
         fmt = 'hosts.%%s.zfs.%s.%%s.' % subdir

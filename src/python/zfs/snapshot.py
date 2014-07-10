@@ -8,28 +8,28 @@
 """
 __all__ = ['SnapshotSender']
 
+import logging
+
 from zfs.url import ZFSURL
 from zfs.sql import (ZDataset,
                      ZPool)
-
-import tx
 
 from butility import (LazyMixin,
                         DictObject)
 from bit.reports import Report
 
 from bit.utility import (delta_to_tty_string,
-                           int_to_size_string,
-                           float_percent_to_tty_string,
-                           ravg, 
-                           rsum,
-                           DistinctStringReducer)
+                         int_to_size_string,
+                         float_percent_to_tty_string,
+                         ravg, 
+                         rsum,
+                         DistinctStringReducer)
 from datetime import (timedelta,
                       datetime)
 from sqlalchemy.orm import object_session
 from sqlalchemy import and_
 
-log = service(tx.ILog).new(__name__)
+log = logging.getLogger(__name__)
 
 # -------------------------
 ## @name Utilities
@@ -124,10 +124,10 @@ class SnapshotSender(LazyMixin):
     # @{
 
     ## Name of property on our objects - internal DB name is different
-    RECEIVE_URL_PROPERTY = 'tx_receive_url'
+    RECEIVE_URL_PROPERTY = 'zfs_receive_url'
 
     ## A special marker indicating that the destination should be located automatically
-    # This is done by using tx:receive-url or finding matching snapshots. This is a smart combination of 
+    # This is done by using zfs:receive-url or finding matching snapshots. This is a smart combination of 
     # DEST_MODE_SEARCH and DEST_MODE_PROPERTY
     DEST_MODE_AUTO = 'auto'
 
@@ -135,7 +135,7 @@ class SnapshotSender(LazyMixin):
     # to be successful
     DEST_MODE_SEARCH = 'search'
 
-    ## Use the filesystem pointed to by the tx_receive_fs property
+    ## Use the filesystem pointed to by the zfs_receive_url property
     DEST_MODE_PROPERTY = 'property'
 
     ## Indicates we want to replicate the source filesystem in it's entirety
@@ -143,8 +143,8 @@ class SnapshotSender(LazyMixin):
     ## ... and force the other side to perfectly match the replication
     REPLICATE_MODE_FORCE = 'replicate_force'
 
-    ## Indicates that tx:receive-url can be inherited. We will only take children into account, also 
-    # if they do not explicitly set their tx:receive-url
+    ## Indicates that zfs:receive-url can be inherited. We will only take children into account, also 
+    # if they do not explicitly set their zfs:receive-url
     # By default, this is not the case which can be useful when replication streams are used. Even though
     # they work, in conjunction with retention both copies could become incompatible which requires 
     CHILDREN_ONLY_MODE = 'children_only'
@@ -224,7 +224,7 @@ class SnapshotSender(LazyMixin):
             if durl:
                 return ZFSURL(durl)
         # end handle inheritance
-        raise ValueError("Source filesystem at '%s' didn't have the 'tx:receive-url' filesystem property set" % source_fs.url())
+        raise ValueError("Source filesystem at '%s' didn't have the 'zfs:receive-url' filesystem property set" % source_fs.url())
 
     @classmethod
     def _dest_by_search(cls, source_fs):
@@ -438,14 +438,14 @@ class SnapshotSender(LazyMixin):
     @classmethod
     def new_from_properties(cls, source_fs):
         """@return a list of SnapshotSender instances, each one per file system at or recursively underneath the
-        filesystem pointed to by the source_url, if it has the tx:receive-url property set to a value that 
+        filesystem pointed to by the source_url, if it has the zfs:receive-url property set to a value that 
         it didn't inherit from it's parent. This allows to generate multiple senders for all viable (i.e. configured)
         filesystems.
         @param source_url a filesystem object to search for attributes. It's descendants will be searched as well.
         """
         out = list()
         def recurse_fs(child, parent_receive_url, may_use_parent_url = False):
-            dest_url = child.tx_receive_url and ZFSURL(child.tx_receive_url)
+            dest_url = child.zfs_receive_url and ZFSURL(child.zfs_receive_url)
             if dest_url and parent_receive_url is not None and dest_url == parent_receive_url:
                 dest_url = None
             # end clear out inheritance
@@ -471,7 +471,7 @@ class SnapshotSender(LazyMixin):
         # end utility
 
         parent = source_fs.parent()
-        return recurse_fs(source_fs, parent and parent.tx_receive_url and ZFSURL(parent.tx_receive_url))
+        return recurse_fs(source_fs, parent and parent.zfs_receive_url and ZFSURL(parent.zfs_receive_url))
         # end handle inheritance
 
     @classmethod

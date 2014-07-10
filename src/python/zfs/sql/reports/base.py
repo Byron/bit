@@ -10,21 +10,17 @@ __all__ = ['ZReportGenerator', 'host_filter']
 
 from butility import LazyMixin
 
-from bit.utility import (
-                            int_to_size_string,
-                            size_to_int,
-                            delta_to_tty_string,
-                            float_percent_to_tty_string,
-                            datetime_days_ago,
-                            datetime_to_date_string
-                            )
+from bit.utility import (int_to_size_string,
+                         size_to_int,
+                         delta_to_tty_string,
+                         float_percent_to_tty_string,
+                         datetime_days_ago,
+                         datetime_to_date_string)
 from bit.reports import ReportGeneratorBase
 from .. import ZSession
 
-from datetime import (
-                        datetime,
-                        timedelta
-                     )                         
+from datetime import (datetime,
+                      timedelta)
 
 
 # -------------------------
@@ -99,7 +95,7 @@ class ZReportGenerator(LazyMixin, ReportGeneratorBase):
 
     def _set_cache_(self, name):
         if name == '_config':
-            self._config = self.context_value()
+            self._config = self.settings_value()
         elif name == '_session':
             self._session = ZSession.new()
         else:

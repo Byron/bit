@@ -6,33 +6,25 @@
 @author Sebastian Thiel
 @copyright [GNU Lesser General Public License](https://www.gnu.org/licenses/lgpl.html)
 """
-__all__ = ['size_to_int', 'date_string_to_datetime', 'ratio_to_float', 'bool_label_to_bool', 'int_to_size_string',
+__all__ = ['date_string_to_datetime', 'ratio_to_float', 'bool_label_to_bool',
            'delta_to_tty_string', 'float_percent_to_tty_string', 'datetime_to_date_string', 'datetime_days_ago',
            'seconds_to_datetime', 'delta_to_seconds', 'Table', 'ravg', 'rsum', 'float_to_tty_string', 'graphite_submit',
-           'DistinctStringReducer', 'TerminatableThread', 'frequncy_to_seconds', 'KVFrequencyStringAsSeconds', 'IDParser',
-           'ExpiringCache', 'CachingIDParser', 'ThreadsafeCachingIDParser', 'set_default_encoding', 'datetime_to_date_time_string',
+           'DistinctStringReducer', 'TerminatableThread', 'IDParser',
+           'ExpiringCache', 'CachingIDParser', 'ThreadsafeCachingIDParser', 'datetime_to_date_time_string',
            'StringMapper', 'utc_datetime_to_date_time_string', 'none_support']
 
-from time import (
-                    strptime,
-                    gmtime,
-                    time,
-                    timezone
-                 )
-from datetime import (
-                        timedelta,
-                        datetime,
-                        date
-                     )
+from time import (strptime,
+                  gmtime,
+                  time,
+                  timezone )
+from datetime import (timedelta,
+                      datetime,
+                      date )
 
 import os
 import sys
 
-if not hasattr(sys, 'setdefaultencoding'):
-    reload(sys)
-# end assure default encoding exits ! ... weird bug
-
-from cPickle import dumps
+from butility.compat import pickle
 from struct import pack
 import socket
 import Queue
@@ -111,13 +103,6 @@ class DistinctStringReducer(object):
 ## @name Utilities
 # ------------------------------------------------------------------------------
 ## @{
-
-def set_default_encoding(encoding):
-    """Set's the python interpreters system encoding to the given one.
-    @return previous encoding"""
-    ce = sys.getdefaultencoding()
-    sys.setdefaultencoding(encoding)
-    return ce
 
 def none_support(string_converter):
     """Decorator to allow string converters to support None"""
@@ -402,19 +387,6 @@ class WorkerThread(TerminatableThread):
     
 #} END classes
 
-
-class KVFrequencyStringAsSeconds(object):
-    """Converts a frequency into seconds
-    Defaults to 0"""
-    __slots__ = ('seconds', 'frequency')
-    
-    def __init__(self, value = None):
-        self.frequency = value
-        self.seconds = value and frequncy_to_seconds(value) or 0
-
-    def __str__(self):
-        return self.frequency
-
 ## -- End Utility Types -- @}
 
 
@@ -423,44 +395,6 @@ class KVFrequencyStringAsSeconds(object):
 # ------------------------------------------------------------------------------
 ## @{
 
-def size_to_int(size):
-    """Converts a size to the respective integer
-    @param size string like 1M or 2T, or 35.5K
-    """
-    unit = size[-1].lower()
-    if unit in '0123456789':
-        return int(size)
-    # end handle no unit
-    try:
-        return int(data_unit_multipliers[unit] * float(size[:-1]))
-    except KeyError:
-        raise ValueError("Invalid unit: '%s'" % unit)
-    # end handle errors gracefully
-
-def frequncy_to_seconds(time_string):
-    """@return seconds identified by the given time-string, like 14s, or 14w
-    @throw ValueError"""
-    try:
-        return int(time_string[:-1]) * time_unit_multipliers[time_string[-1].lower()]
-    except (KeyError, ValueError):
-        raise ValueError("Could not parse '%s' - should be something like <integer><unit>, like 14s, or 12d" % time_string)
-    #end handle frequency conversion
-
-def int_to_size_string(size):
-    """@return a string suitable for input into size_to_int(), scaling dynamically depending on the actual `size`"""
-    asize = abs(size)
-    if asize < 1024**2:
-        divider, unit = 1024, 'K'
-    elif asize <1024**3:
-        divider, unit = 1024**2, 'M'
-    elif asize <1024**4:
-        divider, unit = 1024**3, 'G'
-    elif asize <1024**5:
-        divider, unit = 1024**4, 'T'
-    else:
-        divider, unit = 1024**5, 'P'
-    # end handle sizes
-    return '%.2f%s' % (size / float(divider), unit)
 
 def datetime_to_date_string(datetime):
     """@return a string representation of the given datetime object, just providing the date"""
@@ -564,7 +498,7 @@ def graphite_submit(carbon_host, sample_list, port=CARBON_PORT):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((socket.gethostbyname(carbon_host), port))
         try:
-            payload = dumps(sample_list[cursor:cursor+cs])
+            payload = pickle.dumps(sample_list[cursor:cursor+cs])
             message = pack('!L', len(payload)) + payload
             sock.sendall(message)
         finally:

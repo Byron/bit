@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.tests.test_sql
+@package fsmonitor.tests.test_sql
 @brief tests for dropbox sql related facilities
 
 @author Sebastian Thiel
@@ -14,8 +14,8 @@ from tempfile import mktemp
 from sqlalchemy.orm import object_session 
 from sqlalchemy.orm.util import has_identity 
 
-from tx.tests import with_rw_directory
-from dropbox.sql import *
+from butility.tests import with_rw_directory
+from fsmonitor.sql import *
 from datetime import datetime
 
 

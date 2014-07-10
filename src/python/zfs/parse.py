@@ -9,15 +9,13 @@
 __all__ = ['MachineColumnParserBase', 'AdaptiveColumnParser', 'ZFSListParser', 'ZFSListSnapshotParser', 
            'ZPoolOmniOSParser', 'ZPoolSolarisParser', 'ZPoolOmniOSLegacyParser', 'ZPoolOmniOSLatestVersionParser']
 
-import tx
-from bit.utility import (
-                                size_to_int,
-                                date_string_to_datetime,
-                                ratio_to_float,
-                                bool_label_to_bool
-                          )
+import logging
+from bit.utility import (size_to_int,
+                         date_string_to_datetime,
+                         ratio_to_float,
+                         bool_label_to_bool)
 
-log = service(tx.ILog).new('zfs.parse')
+log = logging.getLogger('zfs.parse')
 
 
 # -------------------------
@@ -188,8 +186,8 @@ class AdaptiveColumnParser(object):
                     'written' : (size_to_int, 1),
                     'lused' : (size_to_int, 1),
                     'lrefer' : (size_to_int, 1),
-                    'tx:priority' : (int, 1),
-                    'tx:status' : (str, 1),
+                    'zfs:priority' : (int, 1),
+                    'zfs:status' : (str, 1),
                 }
     
     ## -- End Configuration -- @}

@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.finder
+@package fsmonitor.finder
 @brief Implements finder utility for dropboxes
 
 @author Sebastian Thiel
@@ -9,14 +9,15 @@
 __all__ = ['DropboxFinder']
 
 import os
+import logging
+
 from fnmatch import fnmatch
 
-import tx
 from butility import Path
 
 from .base import Dropbox
 
-log = service(tx.ILog).new('dropbox.finder')
+log = logging.getLogger('dropbox.finder')
 
 
 class DropboxFinder(object):

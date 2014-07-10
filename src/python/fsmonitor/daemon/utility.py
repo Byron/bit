@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.daemon.utility 
+@package fsmonitor.daemon.utility 
 @brief Various helpers used by the dropbox daemon
 
 @author Sebastian Thiel
@@ -11,24 +11,24 @@ __all__ = []
 
 from datetime import datetime
 from time import time
+import logging
 import threading
 
-import tx
-from tx.core.kvstore import ChangeTrackingKeyValueStoreModifier
+from bkvstore import ChangeTrackingKeyValueStoreModifier
 from bit.utility import (TerminatableThread,
                            WorkerThread,
                            seconds_to_datetime,
                            datetime_to_seconds)
 
-from dropbox.finder import DropboxFinder
-from dropbox.tree import PackageDiffer
-from dropbox.sql import (PackageSession,
+from fsmonitor.finder import DropboxFinder
+from fsmonitor.tree import PackageDiffer
+from fsmonitor.sql import (PackageSession,
                          SQLPackageTransaction,
                          with_threadlocal_session)
 
-from dropbox.transaction import DropboxTransactionBase
+from fsmonitor.transaction import DropboxTransactionBase
 
-log = service(tx.ILog).new('dropbox.daemon')
+log = logging.getLogger('dropbox.daemon')
 
 
 # -------------------------
@@ -172,7 +172,7 @@ class SQLPackageDifferMixin(PackageDiffer):
 
         # We don't care if we have it our not, and allow initialization.
         # However, we will not resolve anything, as this can be done when the transaction queries its data
-        kvstore = ChangeTrackingKeyValueStoreModifier(tx.environment.context().value(our_key, trans_cls.schema))
+        kvstore = ChangeTrackingKeyValueStoreModifier(bapp.main().context().settings().value(our_key, trans_cls.schema))
         kvstore.set_changes(db.settings_kvstore().value(db_key, trans_cls.schema))
         return kvstore
     # end utility
@@ -216,7 +216,7 @@ class SQLPackageDifferMixin(PackageDiffer):
         # There are no transactions to check, so we have to see if we can create one based on the dropbox
         # configuration
         if not trs:
-            clss = tx.environment.classes(DropboxTransactionBase)
+            clss = bapp.main().context().types(DropboxTransactionBase)
             # Workaround our 'AnyKey' issue
             db_config = db.settings_kvstore().data()
             for trans_name in db_config.get(db.TRANSACTIONS_KEY, dict()):

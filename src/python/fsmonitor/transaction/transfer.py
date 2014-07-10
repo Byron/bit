@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.transaction.transfer
+@package fsmonitor.transaction.transfer
 @brief A simple transaction to transfer packages from a to b
 
 @author Sebastian Thiel
@@ -9,18 +9,19 @@
 __all__ = ['TransferDropboxTransaction']
 
 from time import time
+import logging
+
 from datetime import datetime
 
-import tx
 from .base import DropboxTransactionBase
 
-from dropbox.sql import SQLTransactionFile
-from tx.processing.transaction.operations.rsync import RsyncOperation
+from fsmonitor.sql import SQLTransactionFile
+from btransaction import RsyncOperation
 from butility import Path
-from tx.core.kvstore import (KeyValueStoreSchema,
+from bkvstore import (KeyValueStoreSchema,
                              RootKey)
 
-log = service(tx.ILog).new('dropbox.transaction.transfer')
+log = logging.getLogger('dropbox.transaction.transfer')
 
 
 class TransferRsyncOperation(RsyncOperation):

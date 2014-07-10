@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.tests.base
+@package fsmonitor.tests.base
 @brief Basic types for testing
 
 @author Sebastian Thiel
@@ -8,14 +8,14 @@
 """
 __all__ = ['DropboxTestCase']
 
-from tx.tests import TestCaseBase
-from butility import make_path
+from butility.tests import TestCase
+from butility import Path
 
 
-class DropboxTestCase(TestCaseBase):
+class DropboxTestCase(TestCase):
     """Base type for all ZFS related tests"""
     __slots__ = ()
 
-    fixture_root = make_path(__file__).dirname()
+    fixture_root = Path(__file__).dirname()
 
 # end class DropboxTestCase

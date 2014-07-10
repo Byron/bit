@@ -14,18 +14,16 @@ from time import time
 import copy
 import os
 
-from tx.core.kvstore import StringList
+from bkvstore import StringList
 
 
-from bit.utility import (
-                                size_to_int,
-                                delta_to_tty_string,
-                                int_to_size_string,
-                                float_percent_to_tty_string,
-                                DistinctStringReducer,
-                                ravg,
-                                rsum,
-                            )
+from bit.utility import (size_to_int,
+                         delta_to_tty_string,
+                         int_to_size_string,
+                         float_percent_to_tty_string,
+                         DistinctStringReducer,
+                         ravg,
+                         rsum)
 from zfs.url import ZFSURL
 from .base import (ZReportGenerator,
                    host_filter)
@@ -37,7 +35,7 @@ class ZReserveReportGenerator(ZReportGenerator, Plugin):
     free space among all filesystems based on that value."""
 
     type_name = 'reserve'
-    description = "Compute the correct quota or reserve values for all filesystems which have the ``tx:priority`` property set."
+    description = "Compute the correct quota or reserve values for all filesystems which have the ``zfs:priority`` property set."
     _schema = ZReportGenerator._make_schema(type_name, dict(max_cap = 80.0,
                                                             # total space we should distribute among the filesystems
                                                             distribute_space = str,
@@ -72,7 +70,7 @@ class ZReserveReportGenerator(ZReportGenerator, Plugin):
         # Create an initial query and map filesystems by basename
         rep = self.ReportType(copy.deepcopy(self.report_schema))
         now = datetime.now()
-        config = self.context_value()
+        config = self.settings_value()
         if config.mode not in self.valid_modes:
             raise ValueError("Can only support the following modes: %s" % ', '.join(self.valid_modes))
         # end handle
@@ -80,13 +78,13 @@ class ZReserveReportGenerator(ZReportGenerator, Plugin):
         rep.columns[4][0] = config.mode == self.MODE_RESERVATION and 'reserved' or 'quota'
 
         query = self._session.query(ZDataset).filter(ZDataset.avail != None).\
-                                              filter(ZDataset.tx_priority != None).\
+                                              filter(ZDataset.zfs_priority != None).\
                                               filter(ZDataset.name.like(config.pool_name + '%/%'))
 
         query = host_filter(config.hosts, ZDataset.host, query)
         fs_map = dict()
         for fs in query:
-            if fs.property_is_inherited('tx_priority'):
+            if fs.property_is_inherited('zfs_priority'):
                 continue
             fs_map.setdefault((fs.host, fs.url().pool()), list()).append(fs)
         # end for each filesystem
@@ -109,7 +107,7 @@ class ZReserveReportGenerator(ZReportGenerator, Plugin):
                 raise AssertionError("Please specify exactly %i priorities, one for each filesystem, got %i" % (len(fs_list), len(config.debug_priorities)))
             # end verify priorities
 
-            priorities = config.debug_priorities or [fs.tx_priority for fs in fs_list]
+            priorities = config.debug_priorities or [fs.zfs_priority for fs in fs_list]
             total_parts = sum(priorities)
             pool = self._session.instance_by_url(ZFSURL.new(host, pool))
             if distribute_space:
@@ -139,7 +137,7 @@ class ZReserveReportGenerator(ZReportGenerator, Plugin):
 
     def generate_fix_script(self, report, writer):
         last_host = None
-        mode = self.context_value().mode
+        mode = self.settings_value().mode
 
         for rec in report.records:
             fs, reserve = rec[1], rec[4]
@@ -155,7 +153,7 @@ class ZReserveReportGenerator(ZReportGenerator, Plugin):
             # end initial info
             last_host = fs.host
             if reserve < fs.used:
-                writer("# Reserve for '%s' is already to low (%s reserved vs %s used), consider increasing its tx:priority\n" % (fs.url(),
+                writer("# Reserve for '%s' is already to low (%s reserved vs %s used), consider increasing its zfs:priority\n" % (fs.url(),
                                                                                                                                  int_to_size_string(reserve), 
                                                                                                                                  int_to_size_string(fs.used)))
             else:

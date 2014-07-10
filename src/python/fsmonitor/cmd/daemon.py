@@ -1,6 +1,6 @@
 #-*-coding:utf-8-*-
 """
-@package dropbox.cmd.daemon
+@package fsmonitor.cmd.daemon
 @brief Implementation of a daemon command to handle dropboxes
 
 @author Sebastian Thiel
@@ -8,12 +8,11 @@
 """
 __all__ = ['DaemonCommand']
 
-import tx
-from bit.cmd import DaemonCommandBase
-from dropbox.daemon import DaemonThread
+from bit.cmd import DaemonCommand
+from fsmonitor.daemon import DaemonThread
 
 
-class DaemonCommand(DaemonCommandBase):
+class DaemonCommand(DaemonCommand):
     """Main Daemon command without subcommands. Just starts a thread.
     @note could easily be a base class, lets see how many more there will be
     """

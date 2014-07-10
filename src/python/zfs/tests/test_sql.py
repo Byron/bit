@@ -10,18 +10,14 @@ __all__ = []
 
 from time import time
 
-from tx.tests import with_rw_directory
+from butility.tests import with_rw_directory
 from zfs.tests import ZFSTestCase
 from zfs.sql import *
-from zfs.parse import (
-                            AdaptiveColumnParser,
-                            ZPoolOmniOSParser,
-                            ZPoolSolarisParser
-                      )
+from zfs.parse import (AdaptiveColumnParser,
+                       ZPoolOmniOSParser,
+                       ZPoolSolarisParser)
 
-from sqlalchemy import (
-                            create_engine
-                        )
+from sqlalchemy import create_engine
 
 class SQLSynTestCase(ZFSTestCase):
     __slots__ = ()
@@ -74,7 +70,7 @@ class SQLSynTestCase(ZFSTestCase):
         # verify custom attributes are actually being submitted
         parser = AdaptiveColumnParser()
         def assert_recv_count_url(condition):
-            assert (len(list(session.query(ZDataset).filter(ZDataset.tx_receive_url != None))) == 0) == condition
+            assert (len(list(session.query(ZDataset).filter(ZDataset.zfs_receive_url != None))) == 0) == condition
 
         assert_recv_count_url(True)
         session.sync('fsx', parser.parse_stream(open(self.fixture_path('cmd/dataset_list.fs4'))), ZDataset)

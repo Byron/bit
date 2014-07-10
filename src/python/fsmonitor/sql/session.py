@@ -9,8 +9,8 @@
 __all__ = ['PackageSession', 'with_threadlocal_session']
 
 import threading
+import logging
 
-import tx
 
 from sqlalchemy.orm import (Session,
                             sessionmaker)
@@ -22,7 +22,7 @@ from bit.utility import seconds_to_datetime
 from socket import gethostname
 from datetime import datetime
 
-log = service(tx.ILog).new('zfs.sql.session')
+log = logging.getLogger('zfs.sql.session')
 
 
 def with_threadlocal_session(fun):
