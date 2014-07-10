@@ -1,0 +1,60 @@
+packages:
+  #################################
+  bit-executable-requirements: ###
+  ###############################
+    alias: python 
+    requires:
+      - bcore
+      - sqlalchemy
+      - bit-package
+
+  #################
+  bit-package: ###
+  ###############
+    name: IT Tools
+    description: |
+      Various libraries to help dealing with IT-related problems
+    environment:
+      variables:
+        PYTHONPATH: '{yaml.bit-packages.dirname}/../src/python'
+
+  ############# 
+  tractool: ##
+  ###########
+    requires:
+      - bit-executable-requirements
+      - tractor-engine
+    arguments:
+      prepend:
+        - -c
+        - from tractool import TractoolCommand; TractoolCommand.main()
+
+  ##########
+  itool: ##
+  ########
+    requires:
+      - bit-executable-requirements
+    arguments:
+      prepend:
+        - -c
+        - from itool import IToolCommand; IToolCommand.main()
+
+  #####################
+  fsmonitor-daemon: ##
+  ###################
+    requires:
+      - bit-executable-requirements
+    arguments:
+      prepend:
+        - -c
+        - from dropbox.cmd import DaemonCommand; DaemonCommand.main()
+
+  ##########
+  ztool: ##
+  ########
+    requires:
+      - bit-executable-requirements
+    arguments:
+      prepend:
+        - -c
+        - from zfs.cmd import ZFSCommand; ZFSCommand.main()

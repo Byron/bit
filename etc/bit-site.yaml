@@ -1,0 +1,37 @@
+zdb:
+  hosturl: '{sqlalchemy.host}/stats'
+  list:
+    columns:
+      filesystem:
+        - url
+        - used
+        - avail
+        - usedds
+        - usedchild
+        - ratio
+        - creation
+  report:
+    limits:
+      max_pool_cap: 101.0
+      max_filesystem_cap: 101.0
+      min_filesystem_avail_size: 0k
+      min_snapshot_size: 0k
+      min_filesystem_size: 0k
+      snapshots_older_than_days: 0
+      filesystems_older_than_days: 0
+    retention:
+      applied_every: 1d
+
+itool:
+  report:
+    version:
+      db_url: '{sqlalchemy.host}/fileserver'
+      path_include_regex: .*\.(exr|abc|mc|mov|mxf|jpeg|bin|pdc|tif|psd|dpx|fxd|mra)$
+
+sqlalchemy:
+  host: mysql://localhost
+
+fs-monitor:
+  daemon:
+    db: 
+      url: '{sqlalchemy.host}/fs-monitor'

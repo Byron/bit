@@ -1,0 +1,11 @@
+*.pyc
+*~
+*.sublime-workspace
+.DS_Store
+.coverage
+cover/
+
+.noseids
+build/
+pages/
+doc/
