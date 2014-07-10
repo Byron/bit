@@ -12,6 +12,8 @@ The bit project is a collection of libraries and tools to aid maintaining a comp
 * [sqlalchemy](https://github.com/zzzeek/sqlalchemy)
     - For some tools to be useful in production, an sql database server is required.
     - For local testing, sqlite databases can be used without problem
+* ([lz4](https://pypi.python.org/pypi/lz4))
+    - Only used if available to compute entrophy of files when gathering filesystem statistics
 
 Optionally, you may need the following
 

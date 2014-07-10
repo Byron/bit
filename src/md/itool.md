@@ -48,12 +48,6 @@ This subcommand has subcommands on its own. One is dedicated to querying the con
     
             itool dropbox transaction reject 999999 --reason "its not allowed to transfer this kind of data"
 
-### tractor
-
-A simple utility to help automating repetitive tractor tasks from the commandline. It allows to get a login to tractor and reload configuration, or set the blade nimby state:
-
-    # TODO: Example
-
 
 ### fs-stat
 
