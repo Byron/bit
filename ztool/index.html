@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://byron.github.io/bit/ztool/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+
+        <title>ZTOOL - ZFS utilities - bit</title>
+
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../css/prettify-1.0.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="..">bit</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="..">Home</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Commands <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../itool/">ITOOL - most general it tools</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href="./">ZTOOL - ZFS utilities</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../license/">License</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                
+                <li >
+                    <a rel="next" href="../itool/">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="../license/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://github.com/Byron/bit">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#the-ztool">The ztool</a></li>
+        
+    
+        <li class="main "><a href="#subcommands">Subcommands</a></li>
+        
+            <li><a href="#report">report</a></li>
+        
+            <li><a href="#convert">convert</a></li>
+        
+            <li><a href="#list">list</a></li>
+        
+            <li><a href="#filesystem">filesystem</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h2 id="the-ztool">The ztool</h2>
+<p>The ztool is a wordplay on 'zfs' and tool, and does a lot of work related to managing zfs filesystems. In that function, it is important for dealing with ZFS based storage infrastructures.</p>
+<p>As any modern commandline tool, it is heavily based on the notion of 'subcommands', which makes them much easier to learn. Each subcommand may have its own set of subcommands along with its particular grammar.</p>
+<h2 id="subcommands">Subcommands</h2>
+<h3 id="report">report</h3>
+<p>As with the <code>report</code> subcommand of the itool, reports generated here are meant to provide you with ZFS specific information.Additionally, they may be used to generate script to delete snapshots based on various criteria.</p>
+<p>All <code>report</code> commands require some configuration values, which can either be done in configuration files (see <code>etc/</code> directory near executable) or via commandline overrides. These are indicated with '-s',  </p>
+<ul>
+<li>
+<p><strong>reserve</strong></p>
+<ul>
+<li>
+<p>Compute the correct quota or reserve values for all filesystems which have the <code>zfs:priority</code> property set.</p>
+<ul>
+<li>A priority of 2 make the filesystem twice as important as the one with priority 1</li>
+</ul>
+</li>
+<li>
+<p>Example</p>
+<pre class="prettyprint well"><code># learn about the configuration parameters
+ztool report reserve query-config
+# a simple reserve report
+ztool  report -s hosts=hostname pool_name=%store% distribute_space=4t max_cap=0 reserve generate
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>duplication</strong></p>
+<ul>
+<li>Find duplicates of filesystems based on the filesystem's name, which is used as primary identity of all clones, and present them as a simple tree with clones ordered by equivalence.</li>
+<li>Use it to find out if there are too many copies of something, or to get an overview about all filesystems based on equivalence.</li>
+<li>
+<p>Example</p>
+<pre class="prettyprint well"><code># Get a report on all filesystems that look like projects
+ztool report -s name_like=%projects/% duplication generate
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>retention</strong></p>
+<ul>
+<li>A complex subcommand which shows all snapshots which would be deleted based on a particular retention policy. Defining this policy is easy once you have understood the system.</li>
+<li>This subcommand drives the automated removal of extra snapshots, as the system takes one snapshot per hour usually.</li>
+<li>
+<p>Example</p>
+<pre class="prettyprint well"><code>ztool report -s hosts=hostname policy=1h:1d,1d:14d,14d:28d,30d:1y name_like=%projects/% retention generate-script
+</code></pre>
+</li>
+<li>
+<p><strong>Retention Policy</strong></p>
+<ul>
+<li>A policy defined by a string that defines a retention policy.</li>
+</ul>
+<p>Each retention period of frequency:history is separated by a comma.
+  Frequencies and histories are specified using the following suffixes:</p>
+<ul>
+<li>s - second</li>
+<li>h - hour</li>
+<li>d - day</li>
+<li>m - month</li>
+<li>y - year</li>
+</ul>
+<p>There can be a prefix per retention period, x:, which indicates the amount of samples to keep at the starting 
+point of the period.
+For instance, 5:1h:1d,2d:4w, means it will keep the most recent 5 samples in the first period, no matter what.</p>
+<p>If you specify x-<oolicy> you indicate that the first x samples will be ignored entirely and just remain.
+This is useful if you want to assure that the most recent sample will always remain for instance.</p>
+<p>Some examples:</p>
+<ul>
+<li>
+<p>10s:14d</p>
+<ul>
+<li>One sample every 10s for 14days</li>
+</ul>
+</li>
+<li>
+<p>1h:1d,1d:14d,14d:28d,30d:1y</p>
+<ul>
+<li>24 samples for a day, then a sample per day for 14 days, then 2 14d for a month, and monthlies for a year</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>limits</strong></p>
+<ul>
+<li>This command is great if you want to list filesystems or snapshots which match a certain minimum or maximum value. In production, its main purpose is to list snapshots older than an amount of days, in order to reduce storage requirements.</li>
+<li>
+<p>Example:</p>
+<pre class="prettyprint well"><code>ztool  report -s name_like=%after% snapshots_older_than_days=5 hosts=hostname limits generate
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="convert">convert</h3>
+<p>The <code>convert</code> command takes <code>zfs list</code> or <code>zpool list</code> information as input and converts it into one ore more output formats. These are at the time of writing </p>
+<ul>
+<li>Comma Separated Values</li>
+<li>SQL</li>
+<li>Graphite</li>
+<li>SQL+Graphite (just for convenience)</li>
+</ul>
+<p>This is already all it does, and it should be used in cron-jobs which pipe the output of <code>zfs</code> commands into respective tool invocation.</p>
+<p>An example from real-world use could be as follows:</p>
+<pre class="prettyprint well"><code>/usr/bin/ssh $host zpool list -o all -H | /path/to/ztool convert -sh $host -f $convert_mode -t sql-sync+graphite || exit $?
+</code></pre>
+<h3 id="list">list</h3>
+<p>A simple tool to list the contents of the zfs information in the underlying SQL database, which can be information about pools, filesystems and snapshots. It allows you to define which columns to show per record using the <code>-o</code> flag, and by which column(s) to sort ascending (<code>-s</code>) or descending (<code>-S</code>).</p>
+<p>A typical invocation could look like this:</p>
+<pre class="prettyprint well"><code>ztool list pool -S cap
+</code></pre>
+<h3 id="filesystem">filesystem</h3>
+<p>The <code>filesystem</code> subcommands main purpose is to generate bash scripts to send one filesystem to another location as efficiently as possible, thus taking snapshots into accounts to only send deltas.</p>
+<p>It operates on simple statements giving it a source and destination filesystem URL, and produces report-like output or a shell script.</p>
+<p>It's used by the entire storage infrastructure, all snapshots are send using this functionality.</p>
+<p>Here are some examples showing the main usecases:</p>
+<pre class="prettyprint well"><code># Show where the store filesystem on hostname would send its snapshots to
+ztool filesystem sync zfs://hostname/store configured
+
+# Find out good candidates to send a particular filesystem to
+ztool filesystem sync zfs://hostname/store/projects/project-name -l
+
+# generate a script to send a given filesystem to a specific location
+ztool filesystem sync zfs://hostname/store/projects/project-name zfs://other-hostname/store/projects/project-name --script
+</code></pre>
+</div>
+        </div>
+
+        
+
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/prettify-1.0.min.js"></script>
+        <script src="../js/base.js"></script>
+    </body>
+</html>
