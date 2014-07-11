@@ -13,19 +13,20 @@ import socket
 import tempfile
 import random
 import mmap
-from time import (time, sleep)
+from time import (time, 
+                  sleep)
 
-from butility import Path
-from .base import ReportGeneratorBase
+from butility import (Path,
+                      size_to_int,
+                      int_to_size_string)
+from .base import ReportGenerator
 
-from bit.utility import (int_to_size_string,
-                           ravg,
+from bit.utility import (  ravg,
                            rsum,
-                           size_to_int,
                            DistinctStringReducer,
                            TerminatableThread)
 
-
+import bapp
 
 # ==============================================================================
 ## @name Utility Types
@@ -278,7 +279,7 @@ class StressorTerminatableThread(TerminatableThread):
 
 
 
-class IOStatReportGenerator(ReportGeneratorBase, Plugin):
+class IOStatReportGenerator(ReportGenerator, bapp.plugin_type()):
     """Gathers information about a system's IO performance.
 
     * create a new unique file a defined directory and write it with data from any source (like /dev/urandom, or a pre-made file with high entropy)
@@ -315,7 +316,7 @@ class IOStatReportGenerator(ReportGeneratorBase, Plugin):
                         ('error', str, str, DistinctStringReducer()),
                     )
 
-    _schema = ReportGeneratorBase._make_schema(type_name, dict(num_threads=1,   # Amount of threads to use for IO,
+    _schema = ReportGenerator._make_schema(type_name, dict(num_threads=1,   # Amount of threads to use for IO,
                                                                source_path=Path('/dev/urandom'),# Path to source from which to read data
                                                                output_dir=Path, # Directory to which to write our files - this is the one to test
                                                                write_chunk_size='10m', # size in bytes to read when generating the file

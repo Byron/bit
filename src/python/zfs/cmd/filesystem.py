@@ -16,11 +16,12 @@ from zfs.snapshot import SnapshotSender
 from zfs.sql import ZSession
 from zfs.url import ZFSURL
 
+import bapp
 from bcmd.argparse import ParserError
 from bit.utility import DistinctStringReducer
 
 
-class FilesystemSubCommand(ZFSSubCommand, Plugin):
+class FilesystemSubCommand(ZFSSubCommand, bapp.plugin_type()):
     """Use reports (as plugins) whose interface is made available through the commandline"""
     __slots__ = ()
 

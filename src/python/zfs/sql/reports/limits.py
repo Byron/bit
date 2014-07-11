@@ -11,16 +11,17 @@ __all__ = ['ZLimitsReportGenerator']
 from datetime import datetime
 from time import time
 
+import bapp
 from bkvstore import StringList
-from bit.utility import (size_to_int,
-                         datetime_days_ago)
+from butility import size_to_int
+from bit.utility import datetime_days_ago
 from .base import (ZReportGenerator,
                    host_filter)
 from .. import (ZPool,
                 ZDataset)
 
 
-class ZLimitsReportGenerator(ZReportGenerator, Plugin):
+class ZLimitsReportGenerator(ZReportGenerator, bapp.plugin_type()):
     """Find pools and or datasets that are above a certain metric limit"""
     __slots__ = ()
 

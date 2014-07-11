@@ -11,6 +11,7 @@ __all__ = []
 import os
 import sys
 
+import bapp
 from butility import LazyMixin
 
 from . import base
@@ -73,7 +74,7 @@ class InMemoryCache(CacheParser, LazyMixin):
 # end class CacheStorage
 
 
-class DBCacheSubCommand(base.TractorDBCommand, Plugin):
+class DBCacheSubCommand(base.TractorDBCommand, bapp.plugin_type()):
     """Implemnts listing the raw database in various ways"""
     __slots__ = ()
     

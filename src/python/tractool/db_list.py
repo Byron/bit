@@ -13,6 +13,8 @@ import sys
 
 from fnmatch import fnmatch
 
+import bapp
+
 from . import base
 from .utility import (CacheParser,
                       CSVJob)
@@ -20,7 +22,7 @@ from .utility import (CacheParser,
 import TrContext
 
 
-class DBListSubCommand(base.TractorDBCommand, Plugin):
+class DBListSubCommand(base.TractorDBCommand, bapp.plugin_type()):
     """Implemnts listing the raw database in various ways"""
     __slots__ = (
                     'args',     # Our input argument namespace

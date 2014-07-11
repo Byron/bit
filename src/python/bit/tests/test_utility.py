@@ -15,7 +15,7 @@ from time import (time,
                   sleep,
                   timezone)
 from datetime import datetime
-
+from butility import size_to_int
 
 class TestUtility(ITTestCaseBase):
     __slots__ = ()

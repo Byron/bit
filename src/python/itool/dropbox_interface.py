@@ -15,15 +15,16 @@ from datetime import datetime
 
 from .base import IToolSubCommand
 
+import bapp
 from bit.cmd import OverridableSubCommandMixin
 from bit.reports import Report
 from bit.utility import (  utc_datetime_to_date_time_string,
                            float_percent_to_tty_string,
-                           int_to_size_string,
                            IDParser,
                            none_support)
 
-from butility import login_name
+from butility import (login_name,
+                      int_to_size_string)
 
 from fsmonitor.daemon import DaemonThread
 from fsmonitor.sql import (PackageSession,
@@ -32,7 +33,7 @@ from fsmonitor.sql import (PackageSession,
 
 
 
-class DropboxInterfaceSubCommand(IToolSubCommand, OverridableSubCommandMixin, Plugin):
+class DropboxInterfaceSubCommand(IToolSubCommand, OverridableSubCommandMixin, bapp.plugin_type()):
     """Implements a commandline interface for handling dropbox transactions"""
     __slots__ = ()
 

@@ -11,7 +11,7 @@ __all__ = ['ReportIToolSubCommand']
 from .base import IToolSubCommand
 from bit.cmd import ReportCommandMixin
 
-from bit.reports import ReportGeneratorBase
+from bit.reports import ReportGenerator
 
 
 class ReportIToolSubCommand(ReportCommandMixin, IToolSubCommand):
@@ -25,7 +25,7 @@ class ReportIToolSubCommand(ReportCommandMixin, IToolSubCommand):
     ## @name Configuration
     # @{
 
-    ReportBaseType = ReportGeneratorBase
+    ReportBaseType = ReportGenerator
     
     ## -- End Configuration -- @}
 

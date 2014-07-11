@@ -10,8 +10,8 @@ __all__ = ['MachineColumnParserBase', 'AdaptiveColumnParser', 'ZFSListParser', '
            'ZPoolOmniOSParser', 'ZPoolSolarisParser', 'ZPoolOmniOSLegacyParser', 'ZPoolOmniOSLatestVersionParser']
 
 import logging
-from bit.utility import (size_to_int,
-                         date_string_to_datetime,
+from butility import size_to_int
+from bit.utility import (date_string_to_datetime,
                          ratio_to_float,
                          bool_label_to_bool)
 

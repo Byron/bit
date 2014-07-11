@@ -13,6 +13,8 @@ from time import time
 
 from urlparse import urlsplit
 
+import bapp
+
 from .base import ZFSSubCommand
 from zfs.parse import   (ZPoolOmniOSParser,
                          ZPoolSolarisParser,
@@ -90,7 +92,7 @@ class GraphiteConverter(ApplicationSettingsMixin):
 
 
 
-class ConverterZFSSubCommand(ZFSSubCommand, Plugin):
+class ConverterZFSSubCommand(ZFSSubCommand, bapp.plugin_type()):
     """Allows to convert the output of standard zfs commandline tools into particular outputs, like CSV or SQL"""
     __slots__ = ()
 

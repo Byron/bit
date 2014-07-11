@@ -13,30 +13,32 @@ import os
 import re
 from time import time
 import marshal
-import lz4
+# We can't assume lz4, so lets use zip, which can decompress reasonably fast at least
+import zlib
 from datetime import datetime
 from itertools import chain
 
-from butility import Path
-from .base import ReportGeneratorBase
+from sqlalchemy import (create_engine,
+                        MetaData,
+                        select)
+
+from butility import (Path,
+                      int_to_size_string)
+from .base import ReportGenerator
 from bit.retention import RetentionPolicy
-from bit.utility import (int_to_size_string,
-                           delta_to_tty_string,
+from bit.utility import (  delta_to_tty_string,
                            seconds_to_datetime,
                            datetime_to_seconds,
                            ravg,
                            rsum,
                            DistinctStringReducer)
 
-from bit.bundler import (Bundler,
+from bit.bundler import (  Bundler,
                            VersionBundleList,
                            VersionBundle)
 
+import bapp
 from bcmd import InputError
-
-from sqlalchemy import (create_engine,
-                        MetaData,
-                        select)
 
 
 
@@ -213,7 +215,7 @@ class FilteringVersionBundler(Bundler):
 
 
 
-class VersionReportGenerator(ReportGeneratorBase, Plugin):
+class VersionReportGenerator(ReportGenerator, bapp.plugin_type()):
     """Generates information about versions used in filesystems"""
     __slots__ = ()
 
@@ -240,7 +242,7 @@ class VersionReportGenerator(ReportGeneratorBase, Plugin):
                         ('avg_modified', int, seconds_to_delta_string),
                     )
 
-    _schema = ReportGeneratorBase._make_schema(type_name, dict(db_url=str(), # sqlalchemy url to database to use
+    _schema = ReportGenerator._make_schema(type_name, dict(db_url=str(), # sqlalchemy url to database to use
                                                                table=str(),  # name of the table to use, compatible to fsstat
                                                                cache_path=Path(), # an optional path to a cache - auto-tried based on table name if set
 
@@ -262,18 +264,18 @@ class VersionReportGenerator(ReportGeneratorBase, Plugin):
 
     def _cache_path(self, name):
         """@return Path to cache file based on table name"""
-        return Path(name + '_%04i-%02i-%02i.cache.lz4' % (now.year, now.month, now.day))
+        return Path(name + '_%04i-%02i-%02i.cache.z' % (now.year, now.month, now.day))
 
     def _serialize_db(self, db, path):
         """Serialize the given db fast
         @return size of cached data in bytes"""
-        cache = lz4.dumps(marshal.dumps(db))
+        cache = zlib.compress(marshal.dumps(db), 9)
         open(path, 'wb').write(cache)
         return len(cache)
 
     def _deserialize_db(self, path):
         """@return the deserialized database, previusly written by _serialize_db()"""
-        return marshal.loads(lz4.loads(open(path).read()))
+        return marshal.loads(zlib.decompress(open(path).read()))
 
     def _build_database(self, config):
         """@return our database ready to be used.

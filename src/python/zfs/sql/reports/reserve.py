@@ -14,12 +14,11 @@ from time import time
 import copy
 import os
 
+import bapp
 from bkvstore import StringList
-
-
-from bit.utility import (size_to_int,
-                         delta_to_tty_string,
-                         int_to_size_string,
+from butility import (size_to_int,
+                      int_to_size_string)
+from bit.utility import (delta_to_tty_string,
                          float_percent_to_tty_string,
                          DistinctStringReducer,
                          ravg,
@@ -30,7 +29,7 @@ from .base import (ZReportGenerator,
 from .. import ZDataset
 
 
-class ZReserveReportGenerator(ZReportGenerator, Plugin):
+class ZReserveReportGenerator(ZReportGenerator, bapp.plugin_type()):
     """Find filesytems marked with a priority attribute and compute a filesystem reserve value to distribute
     free space among all filesystems based on that value."""
 

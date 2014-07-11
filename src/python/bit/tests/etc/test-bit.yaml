@@ -1,0 +1,7 @@
+packages:
+  ###############
+  nosetests:  ##
+  #############
+    requires:
+      - bit-package
+      - sqlalchemy

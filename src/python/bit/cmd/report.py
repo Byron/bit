@@ -10,12 +10,13 @@ __all__ = ['ReportCommandMixin']
 
 import sys
 
+import bapp
 from .base import OverridableSubCommandMixin
 from bit.reports import Report
 
 
 
-class ReportCommandMixin(OverridableSubCommandMixin, Plugin):
+class ReportCommandMixin(OverridableSubCommandMixin, bapp.plugin_type()):
     """Use reports (as plugins) whose interface is made available through the commandline"""
     __slots__ = ()
 

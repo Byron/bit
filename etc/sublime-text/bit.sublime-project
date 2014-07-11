@@ -12,6 +12,18 @@
 			"file_exclude_patterns" : [
 				"*.sublime-workspace"
 			]
+		},
+		{
+			"follow_symlinks": true,
+			"path": "/Users/byron/Documents/dev/bdevel/lib/components/core",
+			"folder_exclude_patterns" : [
+				".git",
+				"pages",
+				"doc",
+			],
+			"file_exclude_patterns" : [
+				"*.sublime-workspace"
+			]
 		}
 	]
 }

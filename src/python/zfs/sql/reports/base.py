@@ -8,15 +8,15 @@
 """
 __all__ = ['ZReportGenerator', 'host_filter']
 
-from butility import LazyMixin
+from butility import (LazyMixin,
+                      int_to_size_string,
+                      size_to_int)
 
-from bit.utility import (int_to_size_string,
-                         size_to_int,
-                         delta_to_tty_string,
+from bit.utility import (delta_to_tty_string,
                          float_percent_to_tty_string,
                          datetime_days_ago,
                          datetime_to_date_string)
-from bit.reports import ReportGeneratorBase
+from bit.reports import ReportGenerator
 from .. import ZSession
 
 from datetime import (datetime,
@@ -42,7 +42,7 @@ def host_filter(hosts, hosts_attribute, query):
 ## -- End Utilities -- @}
 
 
-class ZReportGenerator(LazyMixin, ReportGeneratorBase):
+class ZReportGenerator(LazyMixin, ReportGenerator):
     """Base class for all reports, using the SQL database as data source"""
     __slots__ = (
                     # Session to query for data
@@ -78,7 +78,7 @@ class ZReportGenerator(LazyMixin, ReportGeneratorBase):
                             ('cap', float, float_percent_to_tty_string),
                             ('comment', str, str),)
 
-    REPORT_ROOT_KEY = ZSession.schema().key().split('.')[0] + '.report'
+    REPORT_ROOT_KEY = ZSession.settings_schema().key().split('.')[0] + '.report'
 
     ## -- End Constants -- @}
 
@@ -88,6 +88,7 @@ class ZReportGenerator(LazyMixin, ReportGeneratorBase):
         super(ZReportGenerator, self).__init__(args)
         
         if session:
+            assert isinstance(session, ZSession)
             self._session = session
         if data:
             self._config = data

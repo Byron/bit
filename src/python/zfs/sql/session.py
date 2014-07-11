@@ -8,6 +8,8 @@
 """
 __all__ = ['ZSession']
 
+import logging
+
 from bapp import ApplicationSettingsMixin
 from bkvstore import KeyValueStoreSchema
 

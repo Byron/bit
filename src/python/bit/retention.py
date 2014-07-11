@@ -9,9 +9,9 @@
 __all__ = ['RetentionPolicy']
 
 from .utility import (  seconds_to_datetime,
-                        delta_to_seconds,
-                        frequncy_to_seconds)
+                        delta_to_seconds )
 from bisect import bisect_left
+from butility import frequncy_to_seconds
 
 
 class RetentionPolicy(object):

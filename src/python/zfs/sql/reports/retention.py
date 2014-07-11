@@ -12,6 +12,7 @@ from datetime import datetime
 from time import time
 import logging
 
+import bapp
 from bkvstore import StringList
 
 from bit.retention import RetentionPolicy
@@ -26,7 +27,7 @@ log = logging.getLogger('zfs.sql.reports.retention')
 
 
 
-class ZRetentionReportGenerator(ZReportGenerator, Plugin):
+class ZRetentionReportGenerator(ZReportGenerator, bapp.plugin_type()):
     """Find pools and or datasets that are above a certain metric limit"""
     __slots__ = ()
 

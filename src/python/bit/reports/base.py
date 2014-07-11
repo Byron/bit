@@ -6,7 +6,7 @@
 @author Sebastian Thiel
 @copyright [GNU Lesser General Public License](https://www.gnu.org/licenses/lgpl.html)
 """
-__all__ = ['ReportGeneratorBase', 'Report']
+__all__ = ['ReportGenerator', 'Report']
 
 from bit.utility import Table
 from bapp import ApplicationSettingsMixin
@@ -110,7 +110,7 @@ class Report(Table):
 # end class Report
 
 
-class ReportGeneratorBase(ApplicationSettingsMixin):
+class ReportGenerator(ApplicationSettingsMixin):
     """Interface for report generators"""
     __slots__ = ('_args')
 
@@ -119,7 +119,7 @@ class ReportGeneratorBase(ApplicationSettingsMixin):
     # @{
 
     ## KeyValueStoreSchema at the correct key to define configuration data for a report of our type
-    # Use ReportGeneratorBase._make_schema(...) to aid the process
+    # Use ReportGenerator._make_schema(...) to aid the process
     _schema = None
     
     ## Type of report our subtype should instantiate during generate
@@ -208,5 +208,5 @@ class ReportGeneratorBase(ApplicationSettingsMixin):
 
     
 
-# end class ReportGeneratorBase
+# end class ReportGenerator
 

@@ -34,14 +34,14 @@ except ImportError:
     lz4dumps = None
 # end ignore missing lz4 compressor
 
-from bit.utility import (int_to_size_string,
-                         seconds_to_datetime)
+from bit.utility import seconds_to_datetime
 from bapp import ApplicationSettingsMixin
 from bkvstore import KeyValueStoreSchema
 from .base import IToolSubCommand
 from . import fsstat_schema
 
-from butility import Path
+from butility import (Path,
+                      int_to_size_string)
 import bcmd.argparse as argparse
 
 from sqlalchemy import (create_engine,

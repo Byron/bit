@@ -13,15 +13,14 @@ from datetime import (datetime,
 from time import time
 import os
 
+import bapp
 from bkvstore import StringList
 
-
-from bit.utility import (size_to_int,
-                         delta_to_tty_string,
-                         int_to_size_string,
+from butility import (size_to_int,
+                      int_to_size_string)
+from bit.utility import (delta_to_tty_string,
                          datetime_days_ago,
                          delta_to_seconds,
-                         size_to_int,
                          float_to_tty_string)
 from .base import ZReportGenerator
 from .. import (ZPool,
@@ -29,7 +28,7 @@ from .. import (ZPool,
 from zfs.snapshot import SnapshotSender
 
 
-class ZDuplicationReportGenerator(ZReportGenerator, Plugin):
+class ZDuplicationReportGenerator(ZReportGenerator, bapp.plugin_type()):
     """Find pools and or datasets that are above a certain metric limit"""
 
     type_name = 'duplication'

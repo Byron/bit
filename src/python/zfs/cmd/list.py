@@ -19,11 +19,12 @@ from zfs.sql import (ZSession,
 from zfs.url import ZFSURL
 from zfs.sql.reports import ZReportGenerator
 from bit.reports import Report
+import bapp
 from bapp import ApplicationSettingsMixin
 from bkvstore import KeyValueStoreSchema
+from butility import int_to_size_string
 from bit.utility import (delta_to_tty_string,
                          datetime_to_date_string,
-                         int_to_size_string,
                          float_percent_to_tty_string,
                          float_to_tty_string,
                          rsum,
@@ -31,7 +32,7 @@ from bit.utility import (delta_to_tty_string,
                          DistinctStringReducer)
 
 
-class ListSubCommand(ZFSSubCommand, ApplicationSettingsMixin, Plugin):
+class ListSubCommand(ZFSSubCommand, ApplicationSettingsMixin, bapp.plugin_type()):
     """Use reports (as plugins) whose interface is made available through the commandline"""
     __slots__ = ()
 

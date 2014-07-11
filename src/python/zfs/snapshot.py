@@ -14,12 +14,12 @@ from zfs.url import ZFSURL
 from zfs.sql import (ZDataset,
                      ZPool)
 
-from butility import (LazyMixin,
-                        DictObject)
+from butility import (  LazyMixin,
+                        DictObject,
+                        int_to_size_string)
 from bit.reports import Report
 
 from bit.utility import (delta_to_tty_string,
-                         int_to_size_string,
                          float_percent_to_tty_string,
                          ravg, 
                          rsum,

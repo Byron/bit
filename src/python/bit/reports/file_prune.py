@@ -13,14 +13,15 @@ import sys
 from fnmatch import fnmatch
 
 
-from .base import ReportGeneratorBase
+from .base import ReportGenerator
 from .version import VersionReportGenerator
 
+import bapp
 from bcmd import InputError
-from butility import Path
+from butility import (Path,
+                      int_to_size_string)
 
-from bit.utility import (int_to_size_string,
-                           delta_to_tty_string,
+from bit.utility import (  delta_to_tty_string,
                            seconds_to_datetime,
                            datetime_to_seconds,
                            ravg,
@@ -33,7 +34,7 @@ from stat import S_ISLNK
 
 
 
-class FilePruneReportGenerator(ReportGeneratorBase, Plugin):
+class FilePruneReportGenerator(ReportGenerator, bapp.plugin_type()):
     """Generates a report stating the duplication state of a certain directory tree compared to any amount of source trees, 
     based on file-names.
 
@@ -52,7 +53,7 @@ class FilePruneReportGenerator(ReportGeneratorBase, Plugin):
                         ('reason', str, str),
                     )
 
-    _schema = ReportGeneratorBase._make_schema(type_name, dict(file_glob="*.rpm", # glob by which to find files of interest
+    _schema = ReportGenerator._make_schema(type_name, dict(file_glob="*.rpm", # glob by which to find files of interest
                                                                script=dict(remove_symlink_destination = True,
                                                                            file_remove_command = "rm -vf"
                                                                             )

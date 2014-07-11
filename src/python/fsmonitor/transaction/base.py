@@ -12,6 +12,7 @@ from time import time
 from socket import gethostname
 from datetime import datetime
 
+import bapp
 from bkvstore import ChangeTrackingKeyValueStoreModifier
 from btransaction import (Transaction,
                           StoringProgressIndicator)
@@ -78,7 +79,7 @@ class DropboxTransactionProgressIndicatorMixin(StoringProgressIndicator):
 # end class DropboxTransactionProgressIndicatorMixin
 
 
-class DropboxTransactionBase(Transaction, DropboxTransactionProgressIndicatorMixin, Plugin):
+class DropboxTransactionBase(Transaction, DropboxTransactionProgressIndicatorMixin, bapp.plugin_type()):
     """A dropbox transaction is just a transaction, but will work with an SQL persistence layer of itself and allows
     to take custom options as defined in a schema.
 

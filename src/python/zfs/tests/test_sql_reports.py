@@ -19,6 +19,7 @@ from bit.utility import seconds_to_datetime
 from time import time
 
 from butility.compat import StringIO
+from bapp.tests import with_application
 
 
 class ReportsTestCase(ZFSTestCase):
@@ -29,7 +30,7 @@ class ReportsTestCase(ZFSTestCase):
 
     def _assert_rep_not_empty(self, ReportType, config):
         """Create a new instance of type report type, and verify it's report capabilities"""
-        gen = ReportType(self.session, config)
+        gen = ReportType(list(), session=self.session, data=config)
         report = gen.generate()
         assert not report.is_empty()
 
@@ -38,6 +39,7 @@ class ReportsTestCase(ZFSTestCase):
             assert sio.getvalue()
         # end verify fix script
 
+    @with_application(from_file=__file__)
     def test_limits(self):
         """Verify the limit check works as expected"""
         config = ZLimitsReportGenerator.settings_value()
@@ -139,6 +141,7 @@ class ReportsTestCase(ZFSTestCase):
 
         assert policy.num_rule_samples()[0] == 1
 
+    @with_application(from_file=__file__)
     def test_retention(self):
         """Verify retention policy report"""
         config = ZRetentionReportGenerator.settings_value()
@@ -241,11 +244,13 @@ class ReportsTestCase(ZFSTestCase):
         assert len(fields) == 2
         assert fields['send_args'] == '-R'
 
+    @with_application(from_file=__file__)
     def test_duplication(self):
         """check the duplication report"""
         config = ZDuplicationReportGenerator.settings_value()
         self._assert_rep_not_empty(ZDuplicationReportGenerator, config)
 
+    @with_application(from_file=__file__)
     def test_reserve(self):
         """check the reserve report"""
         config = ZReserveReportGenerator.settings_value()
