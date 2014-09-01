@@ -8,12 +8,9 @@
 """
 __all__ = ['DaemonThread']
 
-import threading
 import logging
-import sys
 
-from Queue import (Queue,
-                   Empty)
+from Queue import Queue
 from time import (time, 
                   sleep)
 
@@ -24,8 +21,9 @@ from .utility import (SQLPackageDifferMixin,
                       ResultLoggerThread,
                       DaemonDropboxFinderMixin)
 
-from bit.utility import ( TerminatableThread,
-                            FrequencyStringAsSeconds )
+from bit.utility import TerminatableThread
+from bkvstore import FrequencyStringAsSeconds
+
 from bkvstore import (KeyValueStoreSchema,
                              PathList,
                              AnyKey)

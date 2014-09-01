@@ -15,8 +15,7 @@ from datetime import datetime
 
 from .base import DropboxTransactionBase
 
-from fsmonitor.sql import SQLTransactionFile
-from btransaction import RsyncOperation
+from btransaction.operations.rsync import RsyncOperation
 from butility import Path
 from bkvstore import (KeyValueStoreSchema,
                              RootKey)

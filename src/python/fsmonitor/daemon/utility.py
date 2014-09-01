@@ -167,7 +167,7 @@ class SQLPackageDifferMixin(PackageDiffer):
         """@return a merged kvstore for the given transaction type. Will handle all cases correctly
         @param trans_cls a DropboxTransactionBase compatible class whose schema to use
         @param db Dropbox from which to pull configuration"""
-        our_key = '%s.%s.%s' % (self.schema().key(), db.TRANSACTIONS_KEY, trans_cls.plugin_name())
+        our_key = '%s.%s.%s' % (self.settings_schema().key(), db.TRANSACTIONS_KEY, trans_cls.plugin_name())
         db_key = '%s.%s' % (db.TRANSACTIONS_KEY, trans_cls.plugin_name())
 
         # We don't care if we have it our not, and allow initialization.

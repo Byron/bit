@@ -158,7 +158,7 @@ class DaemonCommand(OverridableSubCommandMixin, Command):
         return self
 
     def execute(self, args, remaining_args):
-        self.apply_overrides(self.ThreadType.schema(), args.overrides)
+        self.apply_overrides(self.ThreadType.settings_schema(), args.overrides)
 
         if args.show_config:
             print "%s.*" % self.ThreadType.schema().key()

@@ -76,7 +76,7 @@ class ListSubCommand(ZFSSubCommand, ApplicationSettingsMixin, bapp.plugin_type()
 
     ## -- End Constants -- @}
 
-    _schema = KeyValueStoreSchema('%s.list' % ZSession.schema().key().split('.')[0], {
+    _schema = KeyValueStoreSchema('%s.list' % ZSession.settings_schema().key().split('.')[0], {
                     'columns' : 
                         { 'dataset' : [COLUMN_URL, 'type', 'creation', 'used', 'avail', 'refer',
                                        'ratio', 'quota', 'reserv', 'usedds', 'usedchild'],

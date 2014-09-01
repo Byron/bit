@@ -10,5 +10,4 @@
 from .base import *
 from .fsstat import *
 from .report import *
-from .tractor import *
 from .dropbox_interface import *

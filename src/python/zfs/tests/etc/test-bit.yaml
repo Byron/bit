@@ -5,3 +5,6 @@ packages:
     requires:
       - bit-package
       - sqlalchemy
+
+zdb:
+  hosturl: "sqlite:////{yaml.test-bit.dirname}/../fixtures/sql/zdb.sqlite"

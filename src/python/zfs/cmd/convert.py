@@ -11,9 +11,8 @@ __all__ = ['ConverterZFSSubCommand']
 import sys
 from time import time
 
-from urlparse import urlsplit
-
 import bapp
+from bapp import ApplicationSettingsMixin
 
 from .base import ZFSSubCommand
 from zfs.parse import   (ZPoolOmniOSParser,

@@ -331,7 +331,7 @@ class DropboxInterfaceSubCommand(IToolSubCommand, OverridableSubCommandMixin, ba
         return self
 
     def execute(self, args, remaining_args):
-        self.apply_overrides(DaemonThread.schema(), args.overrides)
+        self.apply_overrides(DaemonThread.settings_schema(), args.overrides)
         subcmd = getattr(args, self.ARG_SUBCOMMAND)
         config = DaemonThread.settings_value()
 

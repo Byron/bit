@@ -2,7 +2,6 @@ packages:
   #################################
   bit-executable-requirements: ###
   ###############################
-    alias: python 
     requires:
       - bcore
       - sqlalchemy
@@ -21,6 +20,7 @@ packages:
   ############# 
   tractool: ##
   ###########
+    alias: python 
     requires:
       - bit-executable-requirements
       - tractor-engine
@@ -32,6 +32,7 @@ packages:
   ##########
   itool: ##
   ########
+    alias: python 
     requires:
       - bit-executable-requirements
     arguments:
@@ -42,6 +43,7 @@ packages:
   #####################
   fsmonitor-daemon: ##
   ###################
+    alias: python 
     requires:
       - bit-executable-requirements
     arguments:
@@ -52,6 +54,7 @@ packages:
   ##########
   ztool: ##
   ########
+    alias: python 
     requires:
       - bit-executable-requirements
     arguments:

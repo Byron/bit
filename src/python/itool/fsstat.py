@@ -35,6 +35,7 @@ except ImportError:
 # end ignore missing lz4 compressor
 
 from bit.utility import seconds_to_datetime
+import bapp
 from bapp import ApplicationSettingsMixin
 from bkvstore import KeyValueStoreSchema
 from .base import IToolSubCommand
@@ -235,7 +236,7 @@ class HashStreamer(Streamer):
 # end class Sha1Streamer
 
 
-class FSStatSubCommand(IToolSubCommand, Plugin, ApplicationSettingsMixin):
+class FSStatSubCommand(IToolSubCommand, bapp.plugin_type(), ApplicationSettingsMixin):
     """Implements interaction with filesystem info caches"""
     __slots__ = ()
 

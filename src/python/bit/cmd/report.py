@@ -50,11 +50,10 @@ class ReportCommandMixin(OverridableSubCommandMixin, bapp.plugin_type()):
     ## @name Utilities
     # @{
 
-    @classmethod
-    def report_types(cls):
+    def report_types(self):
         """@return all report types currently registered"""
-        assert cls.ReportBaseType is not None, "ReportBaseType must be set in subclass"
-        return self.application().context().types(cls.ReportBaseType)
+        assert self.ReportBaseType is not None, "ReportBaseType must be set in subclass"
+        return self.application().context().types(self.ReportBaseType)
 
     ## -- End Utilities -- @}
 
@@ -84,7 +83,7 @@ class ReportCommandMixin(OverridableSubCommandMixin, bapp.plugin_type()):
 
     def execute(self, args, remaining_args):
         generator = args.report_type(args)
-        self.apply_overrides(generator.schema(), args.overrides)
+        self.apply_overrides(generator.settings_schema(), args.overrides)
 
         if args.mode == self.OUTPUT_SCHEMA:
             print >> sys.stderr, (generator.configuration())
@@ -99,7 +98,6 @@ class ReportCommandMixin(OverridableSubCommandMixin, bapp.plugin_type()):
         elif args.mode == self.OUTPUT_GENERATE_SCRIPT:
             # make a report, then write a fix script
             generator.generate_fix_script(generator.generate(), sys.stdout.write)
-            print ""
         else:
             raise NotImplementedError("'%s' mode not implemented" % args.mode)
         # end handle mode

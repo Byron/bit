@@ -17,14 +17,14 @@ import logging
 from .base import DropboxTransactionBase
 
 from bkvstore import (KeyValueStoreSchema,
-                      FrequencyStringAsSeconds
+                      FrequencyStringAsSeconds,
                       RootKey)
 
 from butility import Path
 
-from btransactions import (DeleteOperation,
-                           MoveFSItemOperation,
-                           CreateFSItemOperation)
+from btransaction.operations.fsops import (DeleteOperation,
+                                           MoveFSItemOperation,
+                                           CreateFSItemOperation)
 
 log = logging.getLogger('dropbox.transaction.transfer')
 
